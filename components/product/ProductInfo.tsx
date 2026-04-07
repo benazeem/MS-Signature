@@ -9,7 +9,7 @@ import { SIZES } from "@/lib/constants";
 import type { Product } from "@/lib/data";
 
 export function ProductInfo({ product }: { product: Product }) {
-  const [selectedSize, setSelectedSize] = useState(SIZES[1]); // default 6ml
+  const [selectedSize, setSelectedSize] = useState<typeof SIZES[number]>(SIZES[1]); // default 6ml
   const { addItem } = useCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
   const [added, setAdded] = useState(false);
