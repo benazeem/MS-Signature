@@ -1,17 +1,6 @@
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-
-interface ButtonProps {
-  children: React.ReactNode;
-  href?: string;
-  onClick?: () => void;
-  variant?: "primary" | "outline" | "ghost";
-  size?: "sm" | "md" | "lg";
-  className?: string;
-  id?: string;
-  type?: "button" | "submit";
-  disabled?: boolean;
-}
+import { ButtonProps } from "@/types/components.types";
 
 export function Button({
   children,
@@ -28,12 +17,11 @@ export function Button({
     "inline-flex items-center justify-center font-body tracking-wider uppercase transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed";
 
   const variants = {
-    primary:
-      "bg-gold text-primary hover:bg-soft-gold font-semibold",
-    outline:
-      "border border-gold text-gold hover:bg-gold hover:text-primary",
-    ghost:
-      "text-text-muted hover:text-gold",
+    primary: "bg-gold text-primary hover:bg-soft-gold font-semibold",
+    secondary: "bg-white/10 text-text-light hover:bg-white/20",
+    outline: "border border-gold text-gold hover:bg-gold hover:text-primary",
+    ghost: "text-text-muted hover:text-gold",
+    gold: "bg-gold text-primary hover:bg-soft-gold font-semibold",
   };
 
   const sizes = {

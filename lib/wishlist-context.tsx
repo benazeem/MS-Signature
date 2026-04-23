@@ -1,48 +1,88 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
+import { createContext, useCallback, useContext, useMemo, useRef, useSyncExternalStore, type ReactNode } from "react";
+import { useGuestAuth } from "@/lib/guest-auth-context";
+import { useAuth } from "@/lib/supabase-auth-context";
+import { useToast } from "@/components/ui/Toast";
 
-interface WishlistContextType {
-  wishlist: string[];
-  toggleWishlist: (productId: string) => void;
-  isWishlisted: (productId: string) => boolean;
-}
+import { WishlistContextType } from "@/types/wishlist.types";
 
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
+const EMPTY_WISHLIST: string[] = [];
 
 export function WishlistProvider({ children }: { children: ReactNode }) {
-  const [wishlist, setWishlist] = useState<string[]>([]);
-  const [loaded, setLoaded] = useState(false);
+  const { showToast } = useToast();
+  const { user: guestUser } = useGuestAuth();
+  const { user: supabaseUser } = useAuth();
 
-  useEffect(() => {
+  const snapshotRef = useRef<{ key: string | null; raw: string; parsed: string[] }>({
+    key: null,
+    raw: "[]",
+    parsed: EMPTY_WISHLIST,
+  });
+
+  const userEmail = supabaseUser?.email || guestUser?.email;
+  const wishlistKey = useMemo(() => (userEmail ? `ms-wishlist-${userEmail}` : null), [userEmail]);
+
+  const getWishlistSnapshot = useCallback((): string[] => {
+    if (!wishlistKey || typeof window === "undefined") return EMPTY_WISHLIST;
+
     try {
-      const saved = localStorage.getItem("ms-wishlist");
-      if (saved) {
-        setWishlist(JSON.parse(saved));
+      const raw = localStorage.getItem(wishlistKey) ?? "[]";
+      const cached = snapshotRef.current;
+
+      if (cached.key === wishlistKey && cached.raw === raw) {
+        return cached.parsed;
       }
+
+      const parsed = JSON.parse(raw);
+      const normalized = Array.isArray(parsed) ? parsed : EMPTY_WISHLIST;
+      snapshotRef.current = { key: wishlistKey, raw, parsed: normalized };
+      return normalized;
     } catch {
-      // ignore
+      snapshotRef.current = { key: wishlistKey, raw: "[]", parsed: EMPTY_WISHLIST };
+      return EMPTY_WISHLIST;
     }
-    setLoaded(true);
+  }, [wishlistKey]);
+
+  const subscribe = useCallback((onStoreChange: () => void) => {
+    window.addEventListener("storage", onStoreChange);
+    window.addEventListener("ms-wishlist-change", onStoreChange);
+    return () => {
+      window.removeEventListener("storage", onStoreChange);
+      window.removeEventListener("ms-wishlist-change", onStoreChange);
+    };
   }, []);
 
-  useEffect(() => {
-    if (loaded) {
-      localStorage.setItem("ms-wishlist", JSON.stringify(wishlist));
-    }
-  }, [wishlist, loaded]);
+  const getServerWishlistSnapshot = useCallback(() => EMPTY_WISHLIST, []);
 
-  const toggleWishlist = useCallback((productId: string) => {
-    setWishlist((prev) =>
-      prev.includes(productId)
-        ? prev.filter((id) => id !== productId)
-        : [...prev, productId]
-    );
-  }, []);
+  const wishlist = useSyncExternalStore(
+    subscribe,
+    getWishlistSnapshot,
+    getServerWishlistSnapshot
+  );
+
+  const toggleWishlist = useCallback(
+    (productId: string) => {
+      if (!wishlistKey) {
+        showToast("Sign in to save items to your wishlist", "info");
+        return;
+      }
+
+      const current = getWishlistSnapshot();
+      const next = current.includes(productId)
+        ? current.filter((id) => id !== productId)
+        : [...current, productId];
+
+      localStorage.setItem(wishlistKey, JSON.stringify(next));
+      window.dispatchEvent(new Event("ms-wishlist-change"));
+    },
+    [getWishlistSnapshot, showToast, wishlistKey]
+  );
 
   const isWishlisted = useCallback(
-    (productId: string) => wishlist.includes(productId),
-    [wishlist]
+    (productId: string) => (wishlistKey ? wishlist.includes(productId) : false),
+    [wishlist, wishlistKey]
   );
 
   return (

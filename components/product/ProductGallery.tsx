@@ -3,24 +3,29 @@
 import Image from "next/image";
 import { useState } from "react";
 
-export function ProductGallery({ images, name }: { images: string[]; name: string }) {
+export function ProductGallery({
+  images,
+  name,
+}: {
+  images: string[];
+  name: string;
+}) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   return (
     <div className="space-y-4">
-      {/* Main Image */}
       <div className="relative h-[400px] md:h-[520px] bg-accent/50 overflow-hidden group">
         <Image
           src={images[activeIndex]}
           alt={name}
           fill
+          sizes="(max-width: 768px) 100vw, 50vw"
           className="object-cover transition-transform duration-700 group-hover:scale-105"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-primary/30 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-t from-primary/30 to-transparent" />
       </div>
 
-      {/* Thumbnails */}
       {images.length > 1 && (
         <div className="flex gap-3">
           {images.map((img, i) => (
@@ -33,8 +38,16 @@ export function ProductGallery({ images, name }: { images: string[]; name: strin
                   : "border border-border opacity-60 hover:opacity-100"
               }`}
               id={`gallery-thumb-${i}`}
+              aria-label={`Select image ${i + 1} for ${name}`}
+              aria-pressed={i === activeIndex}
             >
-              <Image src={img} alt={`${name} ${i + 1}`} fill className="object-cover" />
+              <Image
+                src={img}
+                alt={`${name} ${i + 1}`}
+                fill
+                sizes="80px"
+                className="object-cover"
+              />
             </button>
           ))}
         </div>

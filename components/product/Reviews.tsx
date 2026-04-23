@@ -1,4 +1,4 @@
-import type { Review } from "@/lib/data";
+import { Review } from "@/types/product.types";
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -51,14 +51,14 @@ export function Reviews({ reviews }: { reviews: Review[] }) {
                 {/* Avatar */}
                 <div className="w-10 h-10 bg-gold/10 border border-gold/20 flex items-center justify-center">
                   <span className="text-gold text-sm font-heading">
-                    {review.name[0]}
+                    {review.userName[0]}
                   </span>
                 </div>
                 <div>
                   <span className="text-text-light text-sm font-medium block">
-                    {review.name}
+                    {review.userName}
                   </span>
-                  <span className="text-text-muted text-xs">{review.date}</span>
+                  <span className="text-text-muted text-xs">{review.createdAt}</span>
                 </div>
               </div>
               <StarRating rating={review.rating} />

@@ -1,23 +1,16 @@
 "use client";
 
-import { CATEGORIES } from "@/lib/constants";
-
-interface FiltersProps {
-  selectedCategory: string;
-  onCategoryChange: (category: string) => void;
-  sortBy: string;
-  onSortChange: (sort: string) => void;
-}
+import { FiltersProps } from "@/types/components.types";
 
 export function Filters({
   selectedCategory,
   onCategoryChange,
   sortBy,
   onSortChange,
+  categories,
 }: FiltersProps) {
   return (
     <div className="space-y-8">
-      {/* Category Filter */}
       <div>
         <h3 className="font-heading text-sm tracking-widest uppercase text-gold mb-4">
           Category
@@ -34,7 +27,7 @@ export function Filters({
           >
             All Categories
           </button>
-          {CATEGORIES.map((cat) => (
+          {categories.map((cat) => (
             <button
               key={cat.slug}
               onClick={() => onCategoryChange(cat.slug)}
@@ -51,7 +44,6 @@ export function Filters({
         </div>
       </div>
 
-      {/* Sort */}
       <div>
         <h3 className="font-heading text-sm tracking-widest uppercase text-gold mb-4">
           Sort By

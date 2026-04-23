@@ -2,6 +2,7 @@ import { Hero } from "@/components/home/Hero";
 import { Categories } from "@/components/home/Categories";
 import { FeaturedProducts } from "@/components/home/FeaturedProducts";
 import { BrandStory } from "@/components/home/BrandStory";
+import { HorizontalScroll } from "@/components/home/HorizontalScroll";
 
 export default function HomePage() {
   return (
@@ -9,6 +10,7 @@ export default function HomePage() {
       <Hero />
       <Categories />
       <FeaturedProducts />
+      <HorizontalScroll />
       <BrandStory />
     </>
   );

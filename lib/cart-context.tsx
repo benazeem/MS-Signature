@@ -1,50 +1,31 @@
 "use client";
 
 import { createContext, useContext, useEffect, useState, useCallback, type ReactNode } from "react";
-import type { Product } from "@/lib/data";
-
-export interface CartItem {
-  product: Product;
-  size: string;
-  quantity: number;
-  priceModifier: number;
-}
-
-interface CartContextType {
-  items: CartItem[];
-  addItem: (product: Product, size: string, priceModifier: number) => void;
-  removeItem: (productId: string, size: string) => void;
-  updateQuantity: (productId: string, size: string, quantity: number) => void;
-  clearCart: () => void;
-  totalItems: number;
-  totalPrice: number;
-}
+import { CartItem, CartContextType } from "@/types/cart.types";
+import { Product } from "@/types/product.types";
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
-  const [loaded, setLoaded] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
 
-  // Load from localStorage
   useEffect(() => {
     try {
       const saved = localStorage.getItem("ms-cart");
-      if (saved) {
-        setItems(JSON.parse(saved));
-      }
+      const parsed = saved ? JSON.parse(saved) : [];
+      setItems(Array.isArray(parsed) ? parsed : []);
     } catch {
-      // ignore
+      setItems([]);
+    } finally {
+      setHydrated(true);
     }
-    setLoaded(true);
   }, []);
 
-  // Persist to localStorage
   useEffect(() => {
-    if (loaded) {
-      localStorage.setItem("ms-cart", JSON.stringify(items));
-    }
-  }, [items, loaded]);
+    if (!hydrated) return;
+    localStorage.setItem("ms-cart", JSON.stringify(items));
+  }, [hydrated, items]);
 
   const addItem = useCallback((product: Product, size: string, priceModifier: number) => {
     setItems((prev) => {

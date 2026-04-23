@@ -6,10 +6,12 @@ import { useCart } from "@/lib/cart-context";
 import { useWishlist } from "@/lib/wishlist-context";
 import { Button } from "@/components/ui/Button";
 import { SIZES } from "@/lib/constants";
-import type { Product } from "@/lib/data";
+import { Product } from "@/types/product.types";
 
 export function ProductInfo({ product }: { product: Product }) {
-  const [selectedSize, setSelectedSize] = useState<typeof SIZES[number]>(SIZES[1]); // default 6ml
+  const [selectedSize, setSelectedSize] = useState<(typeof SIZES)[number]>(
+    SIZES[1],
+  );
   const { addItem } = useCart();
   const { isWishlisted, toggleWishlist } = useWishlist();
   const [added, setAdded] = useState(false);
@@ -24,22 +26,18 @@ export function ProductInfo({ product }: { product: Product }) {
 
   return (
     <div className="space-y-8">
-      {/* Category */}
       <span className="text-gold text-xs tracking-[0.3em] uppercase">
         {product.category}
       </span>
 
-      {/* Name */}
       <h1 className="font-heading text-4xl md:text-5xl text-text-light leading-tight">
         {product.name}
       </h1>
 
-      {/* Tagline */}
       <p className="text-text-muted text-lg italic font-heading">
         {product.tagline}
       </p>
 
-      {/* Price */}
       <div className="flex items-baseline gap-3">
         <span className="text-gold font-heading text-3xl">
           {formatPrice(totalPrice)}
@@ -51,15 +49,16 @@ export function ProductInfo({ product }: { product: Product }) {
 
       <div className="gold-separator" />
 
-      {/* Description */}
       <p className="text-text-muted text-sm leading-relaxed">
         {product.description}
       </p>
 
-      {/* Notes */}
       <div className="grid grid-cols-3 gap-4">
         {Object.entries(product.notes).map(([key, value]) => (
-          <div key={key} className="text-center p-4 bg-accent/50 border border-border">
+          <div
+            key={key}
+            className="text-center p-4 bg-accent/50 border border-border"
+          >
             <span className="text-gold text-[10px] tracking-[0.2em] uppercase block mb-2">
               {key}
             </span>
@@ -68,7 +67,6 @@ export function ProductInfo({ product }: { product: Product }) {
         ))}
       </div>
 
-      {/* Size Selector */}
       <div>
         <span className="text-text-muted text-xs tracking-widest uppercase block mb-3">
           Size
@@ -84,6 +82,7 @@ export function ProductInfo({ product }: { product: Product }) {
                   : "border border-border text-text-muted hover:border-gold hover:text-gold"
               }`}
               id={`size-${size.value}`}
+              aria-pressed={selectedSize.value === size.value}
             >
               {size.label}
             </button>
@@ -91,15 +90,19 @@ export function ProductInfo({ product }: { product: Product }) {
         </div>
       </div>
 
-      {/* Actions */}
       <div className="flex gap-4 pt-2">
         <Button
           onClick={handleAddToCart}
           size="lg"
           className="flex-1"
           id="add-to-cart-btn"
+          disabled={!product.inStock}
         >
-          {added ? "✓ Added to Cart" : "Add to Cart"}
+          {!product.inStock
+            ? "Sold Out"
+            : added
+              ? "✓ Added to Cart"
+              : "Add to Cart"}
         </Button>
         <button
           onClick={() => toggleWishlist(product.id)}
@@ -109,7 +112,11 @@ export function ProductInfo({ product }: { product: Product }) {
               : "border-border text-text-muted hover:border-gold hover:text-gold"
           }`}
           id="wishlist-btn"
-          aria-label="Toggle wishlist"
+          aria-label={
+            isWishlisted(product.id)
+              ? "Remove from wishlist"
+              : "Add to wishlist"
+          }
         >
           <svg
             width="20"

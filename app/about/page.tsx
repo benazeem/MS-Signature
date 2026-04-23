@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
 
@@ -12,7 +11,6 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="pt-28">
-      {/* Hero */}
       <section className="container-wide py-20 text-center">
         <span className="text-gold text-xs tracking-[0.4em] uppercase block mb-6 animate-fade-in">
           Our Story
@@ -28,7 +26,6 @@ export default function AboutPage() {
         </p>
       </section>
 
-      {/* Values */}
       <Section className="bg-accent/30" id="values">
         <SectionHeader
           label="What We Stand For"
@@ -69,7 +66,6 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      {/* Process */}
       <Section id="process">
         <SectionHeader
           label="Craftsmanship"
@@ -104,7 +100,6 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      {/* CTA */}
       <Section className="bg-accent/30">
         <div className="text-center max-w-xl mx-auto">
           <h2 className="font-heading text-3xl md:text-4xl text-text-light mb-6">
