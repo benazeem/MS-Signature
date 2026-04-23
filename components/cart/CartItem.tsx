@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { formatPrice } from "@/lib/utils";
-import { useCart, type CartItem as CartItemType } from "@/lib/cart-context";
+import { useCart } from "@/lib/cart-context";
+import { CartItem as CartItemType } from "@/types/cart.types";
 
 export function CartItem({ item }: { item: CartItemType }) {
   const { removeItem, updateQuantity } = useCart();
@@ -14,7 +15,7 @@ export function CartItem({ item }: { item: CartItemType }) {
       id={`cart-item-${item.product.id}-${item.size}`}
     >
       {/* Image */}
-      <div className="relative w-20 h-20 flex-shrink-0 bg-primary/50">
+      <div className="relative w-20 h-20 shrink-0 bg-primary/50">
         <Image
           src={item.product.image}
           alt={item.product.name}
@@ -35,7 +36,7 @@ export function CartItem({ item }: { item: CartItemType }) {
       </div>
 
       {/* Quantity */}
-      <div className="flex items-center gap-3 flex-shrink-0">
+      <div className="flex items-center gap-3 shrink-0">
         <button
           onClick={() =>
             updateQuantity(item.product.id, item.size, item.quantity - 1)
@@ -62,7 +63,7 @@ export function CartItem({ item }: { item: CartItemType }) {
       {/* Remove */}
       <button
         onClick={() => removeItem(item.product.id, item.size)}
-        className="text-text-muted hover:text-red-400 transition-colors duration-300 flex-shrink-0"
+        className="text-text-muted hover:text-red-400 transition-colors duration-300 shrink-0"
         id={`remove-${item.product.id}`}
         aria-label="Remove item"
       >

@@ -4,11 +4,9 @@ import { formatPrice } from "@/lib/utils";
 import { useCart } from "@/lib/cart-context";
 import { Button } from "@/components/ui/Button";
 import { useRouter } from "next/navigation";
-import { useSession } from "@/lib/auth-client";
 
 export function CartSummary() {
   const router = useRouter();
-  const { data: session } = useSession();
   const { totalPrice, totalItems } = useCart();
   const shipping = totalPrice > 999 ? 0 : 99;
   const finalTotal = totalPrice + shipping;
@@ -58,14 +56,10 @@ export function CartSummary() {
         id="checkout-btn"
         onClick={() => {
           if (totalItems === 0) return;
-          if (session?.user) {
-            router.push("/checkout");
-          } else {
-            router.push("/login?redirect=/checkout");
-          }
+          router.push("/checkout");
         }}
       >
-        {session?.user ? "Proceed to Checkout" : "Login to Checkout"}
+        Proceed to Checkout
       </Button>
 
       <p className="text-text-muted text-[10px] text-center mt-4 tracking-wider">

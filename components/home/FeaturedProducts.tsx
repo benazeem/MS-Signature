@@ -1,10 +1,34 @@
 import { Section, SectionHeader } from "@/components/ui/Section";
 import { ProductCard } from "@/components/shop/ProductCard";
-import { getFeaturedProducts } from "@/lib/data";
+import { getFeaturedProducts as getFeaturedSanityProducts } from "@/sanity/lib/client";
 import { Button } from "@/components/ui/Button";
+import { Product } from "@/types/product.types";
 
-export function FeaturedProducts() {
-  const featured = getFeaturedProducts();
+export async function FeaturedProducts() {
+  let sanityProducts: Product[] = [];
+  try {
+    const data = await getFeaturedSanityProducts();
+    sanityProducts = data.map((p) => ({
+      id: p._id,
+      slug: p.slug,
+      name: p.name,
+      tagline: p.tagline || "",
+      description: p.description || "",
+      price: p.price || 0,
+      category: (p.category as "oud" | "floral" | "musk") || "oud",
+      image: p.image || "/products/oud.png",
+      images: p.images || [],
+      featured: p.featured || false,
+      bestSeller: p.bestSeller || false,
+      notes: p.notes || { top: "", heart: "", base: "" },
+      inStock: p.inStock ?? true,
+      reviews: [],
+    }));
+  } catch (err) {
+    console.warn("Failed to fetch featured products from Sanity", err);
+  }
+
+  const featured = sanityProducts;
 
   return (
     <Section className="bg-accent/30" id="featured">

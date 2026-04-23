@@ -3,58 +3,81 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
 }
 
-model User {
-  id            String    @id
-  name          String
-  email         String
-  emailVerified Boolean
-  image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
-  sessions      Session[]
-  accounts      Account[]
+model Order {
+  id                 String   @id @default(cuid())
+  userEmail          String
+  customerName       String
+  items              Json
+  total              Int
+  status             String   @default("confirmed")
+  shippingAddress    Json
+  razorpayOrderId    String?
+  razorpayPaymentId  String?
+  trackingNumber     String?
+  carrier            String?
+  notes              String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([userEmail])
+  @@index([razorpayOrderId])
+  @@map("orders")
 }
 
-model Session {
-  id        String   @id
-  expiresAt DateTime
-  token     String
-  createdAt DateTime
-  updatedAt DateTime
-  ipAddress String?
-  userAgent String?
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Cart {
+  id        String   @id @default(cuid())
+  userEmail String   @unique
+  items     Json     @default("[]")
+  updatedAt DateTime @updatedAt
 
-  @@unique([token])
+  @@map("carts")
 }
 
-model Account {
-  id                    String    @id
-  accountId             String
-  providerId            String
-  userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  accessToken           String?
-  refreshToken          String?
-  idToken               String?
-  accessTokenExpiresAt  DateTime?
-  refreshTokenExpiresAt DateTime?
-  scope                 String?
-  password              String?
-  createdAt             DateTime
-  updatedAt             DateTime
+model ShippingAddress {
+  id        String   @id @default(cuid())
+  userEmail String
+  name      String
+  phone     String
+  address   String
+  city      String
+  state     String
+  pincode   String
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userEmail])
+  @@map("shipping_addresses")
 }
 
-model Verification {
-  id         String    @id
-  identifier String
-  value      String
-  expiresAt  DateTime
-  createdAt  DateTime?
-  updatedAt  DateTime?
+
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  userEmail String
+  userName  String
+  rating    Int
+  comment   String   @db.Text
+  images    Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId])
+  @@index([userEmail])
+  @@map("reviews")
+}
+
+model ContactSubmission {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String   @db.Text
+  createdAt DateTime @default(now())
+
+  @@map("contact_submissions")
 }
