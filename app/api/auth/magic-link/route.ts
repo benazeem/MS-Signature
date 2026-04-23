@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdmin } from "@/lib/supabase";
+import { getURL } from "@/lib/utils";
 import { sendMagicLinkEmail } from "@/lib/mail";
 
 export async function POST(req: NextRequest) {
@@ -17,7 +18,7 @@ export async function POST(req: NextRequest) {
       email: email,
       options: {
         data: { full_name: name },
-        redirectTo: `${new URL(req.url).origin}/auth/callback`,
+        redirectTo: `${getURL()}/auth/callback`,
       },
     });
 
