@@ -10,8 +10,7 @@ import {
   AlertCircle,
   Loader2,
 } from "lucide-react";
-import { useAuth } from "@/lib/supabase-auth-context";
-import { useGuestAuth } from "@/lib/guest-auth-context";
+import { useAuth } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -31,12 +30,11 @@ export default function TrackOrderPage() {
   const [retryCount, setRetryCount] = useState(0);
   const MAX_RETRIES = 3;
 
-  const { user: supabaseUser, isLoading: authLoading } = useAuth();
-  const { user: guestUser, isLoading: guestLoading } = useGuestAuth();
+  const { user, isLoading: authLoading } = useAuth();
   const router = useRouter();
 
-  const userEmail = supabaseUser?.email || guestUser?.email;
-  const isAuthLoading = authLoading || guestLoading;
+  const userEmail = user?.email;
+  const isAuthLoading = authLoading;
 
   const fetchOrders = useCallback(
     async (email: string) => {
@@ -117,14 +115,14 @@ export default function TrackOrderPage() {
 
   if (isAuthLoading || !userEmail) {
     return (
-      <div className="pt-28 pb-20 min-h-screen flex justify-center items-center">
+      <div className="pt-40 pb-20 min-h-screen flex justify-center items-center">
         <Loader2 size={32} className="animate-spin text-gold" />
       </div>
     );
   }
 
   return (
-    <div className="pt-28 pb-20 min-h-screen">
+    <div className="pt-40 pb-20 min-h-screen">
       <div className="container-wide max-w-3xl">
         <ScrollReveal>
           <p className="text-gold text-xs tracking-[0.4em] uppercase mb-3">

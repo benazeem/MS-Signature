@@ -23,8 +23,7 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "motion/react";
-import { useAuth } from "@/lib/supabase-auth-context";
-import { useGuestAuth } from "@/lib/guest-auth-context";
+import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/components/ui/Toast";
 import { OrderDetail } from "@/types/order.types";
 
@@ -84,12 +83,11 @@ export default function OrderDetailPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { showToast } = useToast();
-  const { user: supabaseUser } = useAuth();
-  const { user: guestUser } = useGuestAuth();
+  const { user } = useAuth();
 
-  const userEmail = supabaseUser?.email || guestUser?.email;
+  const userEmail = user?.email;
   const userName =
-    supabaseUser?.user_metadata?.full_name ||
+    user?.user_metadata.full_name ||
     userEmail?.split("@")[0] ||
     "Guest";
 

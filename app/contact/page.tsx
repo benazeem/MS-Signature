@@ -10,7 +10,7 @@ import {
   Loader2,
   CheckCircle2,
 } from "lucide-react";
-import { useAuth } from "@/lib/supabase-auth-context";
+import { useAuth } from "@/lib/auth-context";
 
 export default function ContactPage() {
   const { user } = useAuth();
@@ -68,7 +68,7 @@ export default function ContactPage() {
   const contactMethods = [
     {
       icon: Mail,
-      label: "Email",
+      label: "Email Us",
       value: "contact@mssignaturescents.com",
       href: "mailto:contact@mssignaturescents.com",
     },
@@ -81,7 +81,7 @@ export default function ContactPage() {
   ];
 
   return (
-    <div className="pt-28 pb-20 min-h-screen">
+    <div className="pt-40 pb-20 min-h-screen">
       <div className="container-wide max-w-5xl">
         <ScrollReveal>
           <p className="text-gold text-xs tracking-[0.4em] uppercase mb-3">

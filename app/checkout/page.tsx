@@ -1,7 +1,7 @@
 "use client";
 
 import { useCart } from "@/lib/cart-context";
-import { useAuth } from "@/lib/supabase-auth-context";
+import { useAuth } from "@/lib/auth-context";
 import { useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
@@ -27,7 +27,7 @@ declare global {
   }
 }
 
-import { RazorpayResponse, RazorpayOptions, ShippingForm, SavedAddress } from "@/types/order.types";
+import {  RazorpayOptions, ShippingForm, SavedAddress } from "@/types/order.types";
 
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
@@ -250,7 +250,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="pt-28 pb-20 min-h-screen">
+    <div className="pt-40 pb-20 min-h-screen">
       <div className="container-wide max-w-5xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

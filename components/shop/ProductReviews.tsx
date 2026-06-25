@@ -2,8 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { Star, Loader2, User, Image as ImageIcon, X } from "lucide-react";
-import { useAuth } from "@/lib/supabase-auth-context";
-import { useGuestAuth } from "@/lib/guest-auth-context";
+import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/components/ui/Toast";
 import Image from "next/image";
 
@@ -21,11 +20,10 @@ export function ProductReviews({ productId }: { productId: string }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   
   const { showToast } = useToast();
-  const { user: supabaseUser } = useAuth();
-  const { user: guestUser } = useGuestAuth();
+  const { user } = useAuth();
 
-  const userEmail = supabaseUser?.email || guestUser?.email;
-  const userName = supabaseUser?.user_metadata?.full_name || userEmail?.split("@")[0] || "Guest";
+  const userEmail = user?.email;
+  const userName = user?.user_metadata.full_name || userEmail?.split("@")[0] || "Guest";
 
   const fetchReviews = useCallback(async () => {
     setLoading(true);

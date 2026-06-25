@@ -15,7 +15,7 @@ export async function FeaturedProducts() {
       tagline: p.tagline || "",
       description: p.description || "",
       price: p.price || 0,
-      category: (p.category as "oud" | "floral" | "musk") || "oud",
+      category: (p.category as "attar" | "perfume") || "attar",
       image: p.image || "/products/oud.png",
       images: p.images || [],
       featured: p.featured || false,

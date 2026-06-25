@@ -36,6 +36,21 @@ export default defineType({
       type: "image",
       options: { hotspot: true },
     }),
+    defineField({
+      name: "metaTitle",
+      title: "SEO Meta Title",
+      type: "string",
+      description: "Optional. Custom title for search engines. Falls back to category name.",
+      validation: (rule) => rule.max(60),
+    }),
+    defineField({
+      name: "metaDescription",
+      title: "SEO Meta Description",
+      type: "text",
+      rows: 3,
+      description: "Optional. Custom description for search engines. Falls back to description.",
+      validation: (rule) => rule.max(160),
+    }),
   ],
   preview: {
     select: { title: "name", subtitle: "slug.current" },

@@ -14,14 +14,17 @@ export interface Product {
   tagline: string;
   description: string;
   price: number;
-  category: "oud" | "floral" | "musk";
+  category: "attar" | "perfume";
   image: string;
   images: string[];
   featured: boolean;
   bestSeller: boolean;
   notes: { top: string; heart: string; base: string };
+  sizes?: { label: string; value: string; price: number }[];
   reviews: Review[];
   inStock: boolean;
+  metaTitle?: string;
+  metaDescription?: string;
 }
 
-export type ProductCategory = "oud" | "floral" | "musk";
+export type ProductCategory = "attar" | "perfume";

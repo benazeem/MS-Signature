@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
 import { Plus, Minus, Heart, ShoppingBag } from "lucide-react";
 import { formatPrice } from "@/lib/utils";
@@ -26,12 +28,22 @@ export function ProductCard({
   const { showToast } = useToast();
   const wishlisted = isWishlisted(product.id);
 
-  const [selectedSize, setSelectedSize] = useState<string>(SIZES[0].value);
+  const hasSizes = product.sizes && product.sizes.length > 0;
+  const initialSize = hasSizes ? product.sizes![0].value : "";
+  const [selectedSize, setSelectedSize] = useState<string>(initialSize);
   const [showSizes, setShowSizes] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
-  const selectedSizeDef =
-    SIZES.find((s) => s.value === selectedSize) ?? SIZES[0];
-  const finalPrice = product.price + selectedSizeDef.price;
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setMounted(true);
+  }, []);
+
+  const selectedSizeDef = hasSizes
+    ? product.sizes!.find((s) => s.value === selectedSize) ?? product.sizes![0]
+    : null;
+  const finalPrice = product.price + (selectedSizeDef ? selectedSizeDef.price : 0);
 
   const cartItem = items.find(
     (i) => i.product.id === product.id && i.size === selectedSize,
@@ -40,8 +52,16 @@ export function ProductCard({
   const cartQty = cartItem?.quantity ?? 0;
 
   const handleAdd = () => {
-    addItem(product, selectedSize, selectedSizeDef.price);
-    showToast(`${product.name} (${selectedSize}) added to cart`, "success");
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmWhatsApp = () => {
+    setShowConfirmModal(false);
+    const whatsappNumber = "916398412670";
+    const text = encodeURIComponent(
+      `Hi, I'm interested in buying ${product.name}${selectedSizeDef ? ` - ${selectedSizeDef.label}` : ""}.`
+    );
+    window.open(`https://wa.me/${whatsappNumber}?text=${text}`, "_blank");
   };
 
   const handleIncrease = () =>
@@ -105,7 +125,7 @@ export function ProductCard({
           </AnimatePresence>
         </Link>
 
-        <button
+        {/* <button
           onClick={() => toggleWishlist(product.id)}
           className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-primary/70 backdrop-blur-sm border border-border hover:border-gold/60 transition-all duration-300 z-10 rounded-full"
           id={`wishlist-${product.slug}`}
@@ -115,7 +135,7 @@ export function ProductCard({
             size={14}
             className={`transition-colors duration-200 ${wishlisted ? "fill-gold text-gold" : "text-text-muted"}`}
           />
-        </button>
+        </button> */}
 
         <div className="p-4 flex flex-col flex-1">
           <Link href={`/product/${product.slug}`}>
@@ -130,61 +150,63 @@ export function ProductCard({
             </p>
           </Link>
 
-          <div className="mb-3">
-            <button
-              onClick={() => setShowSizes(!showSizes)}
-              className="flex items-center gap-1.5 text-[10px] tracking-widest uppercase text-text-muted hover:text-gold transition-colors duration-200"
-            >
-              <span className="border border-border px-2 py-0.5 rounded text-[9px]">
-                {selectedSize}
-              </span>
-              <span>Size</span>
-              <span className="text-[8px]">{showSizes ? "▲" : "▼"}</span>
-            </button>
+          {hasSizes && (
+            <div className="mb-3">
+              <button
+                onClick={() => setShowSizes(!showSizes)}
+                className="flex items-center gap-1.5 text-[10px] tracking-widest uppercase text-text-muted hover:text-gold transition-colors duration-200"
+              >
+                <span className="border border-border px-2 py-0.5 rounded text-[9px]">
+                  {selectedSize}
+                </span>
+                <span>Size</span>
+                <span className="text-[8px]">{showSizes ? "▲" : "▼"}</span>
+              </button>
 
-            <AnimatePresence>
-              {showSizes && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.2 }}
-                  className="overflow-hidden"
-                >
-                  <div className="flex gap-1.5 mt-2">
-                    {SIZES.map((size) => (
-                      <button
-                        key={size.value}
-                        onClick={() => {
-                          setSelectedSize(size.value);
-                          setShowSizes(false);
-                        }}
-                        className={`px-2.5 py-1 text-[10px] tracking-wider border rounded transition-all duration-200 ${
-                          selectedSize === size.value
-                            ? "border-gold text-gold bg-gold/10"
-                            : "border-border text-text-muted hover:border-gold/50 hover:text-text-light"
-                        }`}
-                      >
-                        {size.label}
-                        {size.price > 0 && (
-                          <span className="ml-1 opacity-70">
-                            +₹{size.price}
-                          </span>
-                        )}
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+              <AnimatePresence>
+                {showSizes && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="flex gap-1.5 mt-2">
+                      {product.sizes!.map((size) => (
+                        <button
+                          key={size.value}
+                          onClick={() => {
+                            setSelectedSize(size.value);
+                            setShowSizes(false);
+                          }}
+                          className={`px-2.5 py-1 text-[10px] tracking-wider border rounded transition-all duration-200 ${
+                            selectedSize === size.value
+                              ? "border-gold text-gold bg-gold/10"
+                              : "border-border text-text-muted hover:border-gold/50 hover:text-text-light"
+                          }`}
+                        >
+                          {size.label}
+                          {size.price > 0 && (
+                            <span className="ml-1 opacity-70">
+                              +₹{size.price}
+                            </span>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
 
           <div className="flex items-center justify-between mt-auto">
             <div>
               <span className="text-gold font-heading text-lg">
                 {formatPrice(finalPrice)}
               </span>
-              {selectedSizeDef.price > 0 && (
+              {selectedSizeDef && selectedSizeDef.price > 0 && (
                 <span className="text-text-muted text-[9px] block -mt-0.5">
                   for {selectedSize}
                 </span>
@@ -246,6 +268,37 @@ export function ProductCard({
           </div>
         </div>
       </div>
+
+      {mounted && showConfirmModal && createPortal(
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/70 backdrop-blur-md">
+          <div
+            className="bg-[#111] border border-border rounded-2xl p-6 max-w-sm w-full shadow-2xl relative"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 className="font-heading text-lg text-text-light mb-3">
+              Order via WhatsApp
+            </h3>
+            <p className="text-text-muted text-sm mb-6 leading-relaxed">
+              You will be redirected to WhatsApp to order **{product.name}{selectedSizeDef ? ` (${selectedSizeDef.label})` : ""}**. Would you like to proceed?
+            </p>
+            <div className="flex gap-3 justify-end">
+              <button
+                onClick={() => setShowConfirmModal(false)}
+                className="px-4 py-2 border border-border rounded-lg text-xs tracking-wider uppercase text-text-muted hover:border-gold hover:text-gold transition-colors duration-200"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirmWhatsApp}
+                className="px-4 py-2 bg-gold text-primary rounded-lg text-xs tracking-wider uppercase font-semibold hover:bg-soft-gold transition-colors duration-200"
+              >
+                Proceed
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </Tilt3D>
   );
 }

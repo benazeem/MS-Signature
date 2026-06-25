@@ -1,29 +1,40 @@
 import { NextRequest, NextResponse } from "next/server";
-import { jwtVerify } from "jose";
+import { createNeonAuth } from "@neondatabase/auth/next/server";
 
-const JWT_SECRET = new TextEncoder().encode(process.env.SUPABASE_JWT_SECRET);
+const auth = createNeonAuth({
+  baseUrl: process.env.NEON_AUTH_BASE_URL!,
+  cookies: {
+    secret: process.env.NEON_AUTH_COOKIE_SECRET!,
+  },
+});
 
 export async function GET(req: NextRequest) {
   try {
-    const token = req.cookies.get("ms_guest_session")?.value;
-
-    if (!token) {
+    const { data: session, error } = await auth.getSession();
+    if (error || !session?.user) {
       return NextResponse.json({ user: null });
     }
 
-    const { payload } = await jwtVerify(token, JWT_SECRET);
-    return NextResponse.json({
-      user: { email: payload.email as string, type: "guest" },
-    });
+    const user = {
+      id: session.user.id,
+      email: session.user.email,
+      type: "user" as const,
+      user_metadata: {
+        full_name: session.user.name ?? undefined,
+      },
+    };
+
+    return NextResponse.json({ user });
   } catch {
-    const response = NextResponse.json({ user: null });
-    response.cookies.delete("ms_guest_session");
-    return response;
+    return NextResponse.json({ user: null });
   }
 }
 
 export async function DELETE() {
-  const response = NextResponse.json({ success: true });
-  response.cookies.delete("ms_guest_session");
-  return response;
+  try {
+    await auth.signOut();
+  } catch {
+    // ignore
+  }
+  return NextResponse.json({ success: true });
 }

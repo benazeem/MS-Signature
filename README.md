@@ -16,17 +16,15 @@ MS Signature Scents is a dark-aesthetic, premium fragrance store specialising in
 
 The application is built on Next.js 16 with the App Router. Server Components handle data-fetching for product listings, categories, and order history, keeping the client bundle minimal. Client Components manage interactive state — cart, wishlist, authentication modals — using React 19. Route Handlers (`app/api/`) provide the full REST API surface.
 
-### Authentication — Supabase Auth
+### Authentication — Neon Auth
 
-### Authentication — Supabase Auth
+User identity is handled by Neon Auth. The app redirects users to the configured Neon Auth URL and validates returned JWTs with the configured JWKS endpoint before creating an HttpOnly session cookie.
 
-User identity is managed by Supabase Auth using a **Magic Link** system. There are no passwords to remember — users simply enter their email and receive a secure sign-in link.
+Guest checkout is also available for frictionless shopping, with order updates tied to the shopper email address.
 
-A secondary **guest checkout** flow is also available for frictionless shopping, where the system automatically generates a session to track order updates.
+### Database — PostgreSQL via Prisma on Neon
 
-### Database — PostgreSQL via Prisma on Supabase
-
-All persistent application data is stored in PostgreSQL, hosted on Supabase. Prisma ORM provides a type-safe database client and manages schema migrations.
+All persistent application data is stored in PostgreSQL, hosted on Neon. Prisma ORM provides a type-safe database client and manages schema migrations.
 
 **Models:**
 | Model | Purpose |
@@ -34,8 +32,8 @@ All persistent application data is stored in PostgreSQL, hosted on Supabase. Pri
 | `Order` | Order records with Razorpay IDs, tracking, status |
 | `Cart` | Persistent cart synced from localStorage on sign-in |
 | `ShippingAddress` | Saved delivery addresses per user |
-| `GuestOtp` | One-time passwords for guest checkout sessions |
 | `Review` | Product ratings and customer photos |
+| `ContactSubmission` | Contact form submissions |
 
 ### Content Management — Sanity CMS
 
@@ -61,7 +59,7 @@ Customer review images and any dynamically uploaded product assets are stored in
 
 ### Email — Nodemailer
 
-Transactional emails (magic links and order confirmations) are sent via Nodemailer. The transport is environment-aware: **Mailtrap** in development for safe inbox testing, **Brevo SMTP** in production.
+Transactional emails, such as order confirmations and contact notifications, are sent via Nodemailer. The transport is environment-aware: **Mailtrap** in development for safe inbox testing, **Brevo SMTP** in production.
 
 ---
 
@@ -101,10 +99,10 @@ components/
 lib/
 ├── cart-context.tsx   # Global cart state (localStorage + React context)
 ├── wishlist-context.tsx
-├── supabase-auth-context.tsx
-├── guest-auth-context.tsx
+├── auth-context.tsx
+├── auth.ts
 ├── mail/              # Code-split mailer (config, templates, index)
-└── supabase.ts        # Singleton Supabase browser client
+└── prisma.ts          # Prisma client backed by Neon PostgreSQL
 
 sanity/
 ├── lib/client.ts      # GROQ queries + typed fetch helpers
@@ -119,10 +117,10 @@ See `.env.example` for the full list. The critical variables are:
 
 | Variable | Purpose |
 |---|---|
-| `DATABASE_URL` | Supabase PostgreSQL connection string (pooled) |
-| `DIRECT_URL` | Supabase direct connection for Prisma migrations |
-| `NEXT_PUBLIC_SUPABASE_URL` | Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase public anon key |
+| `NEON_DATABASE_URL` / `DATABASE_URL` | Neon PostgreSQL connection string (pooled) |
+| `NEON_DIRECT_URL` / `DIRECT_URL` | Neon direct connection for Prisma migrations |
+| `NEON_AUTH_BASE_URL` | Neon Auth URL from the Neon Console |
+| `NEON_AUTH_JWKS_URL` | Neon Auth JWKS endpoint for JWT verification |
 | `RAZORPAY_KEY_ID` / `RAZORPAY_KEY_SECRET` | Razorpay API credentials |
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | Sanity project identifier |
 | `SANITY_API_TOKEN` | Sanity write token for studio mutations |

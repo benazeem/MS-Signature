@@ -12,7 +12,7 @@ export default function ShopLayout({ children }: { children: React.ReactNode }) 
 
 function ShopSkeleton() {
   return (
-    <div className="pt-28 pb-20">
+    <div className="pt-40 pb-20">
       <div className="container-wide">
         <div className="text-center mb-16">
           <div className="w-32 h-3 bg-border/50 rounded mx-auto mb-4" />

@@ -11,16 +11,17 @@ export function ProductGallery({
   name: string;
 }) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const activeImage = images[activeIndex] ?? images[0] ?? "/products/oud.png";
 
   return (
     <div className="space-y-4">
-      <div className="relative h-[400px] md:h-[520px] bg-accent/50 overflow-hidden group">
+      <div className="relative mx-auto aspect-square min-h-[min(50vh,calc(100vw-2rem))] w-full overflow-hidden bg-accent/50 group lg:min-h-[50vh]">
         <Image
-          src={images[activeIndex]}
+          src={activeImage}
           alt={name}
           fill
           sizes="(max-width: 768px) 100vw, 50vw"
-          className="object-cover transition-transform duration-700 group-hover:scale-105"
+          className="object-contain"
           priority
         />
         <div className="absolute inset-0 bg-linear-to-t from-primary/30 to-transparent" />
@@ -46,7 +47,7 @@ export function ProductGallery({
                 alt={`${name} ${i + 1}`}
                 fill
                 sizes="80px"
-                className="object-cover"
+                className="object-contain"
               />
             </button>
           ))}

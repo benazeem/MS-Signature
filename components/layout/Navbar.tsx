@@ -4,8 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { useCart } from "@/lib/cart-context";
-import { useAuth } from "@/lib/supabase-auth-context";
-import { useGuestAuth } from "@/lib/guest-auth-context";
+import { useAuth } from "@/lib/auth-context";
 import { NAV_LINKS } from "@/lib/constants";
 import {
   ShoppingBag,
@@ -22,21 +21,17 @@ import { motion, AnimatePresence } from "motion/react";
 export function Navbar() {
   const pathname = usePathname();
   const { totalItems } = useCart();
-  const { user: supaUser, signOut: supaSignOut } = useAuth();
-  const { user: guestUser, signOut: guestSignOut } = useGuestAuth();
+  const { user, signOut } = useAuth();
 
-  const activeUser = supaUser
+  const activeUser = user
     ? {
-        email: supaUser.email ?? "",
-        name: supaUser.user_metadata?.full_name as string | undefined,
+        email: user.email,
+        name: user.user_metadata.full_name,
       }
-    : guestUser
-      ? { email: guestUser.email, name: undefined }
-      : null;
+    : null;
 
   const handleSignOut = async () => {
-    if (supaUser) await supaSignOut();
-    else await guestSignOut();
+    await signOut();
     setUserMenuOpen(false);
   };
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -76,7 +71,7 @@ export function Navbar() {
           </span>
         </Link>
 
-        <div className="hidden md:flex items-center gap-10">
+        <div className="hidden md:flex items-center mr-0 mx-auto gap-10">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
@@ -99,7 +94,7 @@ export function Navbar() {
         </div>
 
         <div className="flex items-center gap-5">
-          {activeUser ? (
+          {/* {activeUser ? (
             <div ref={userMenuRef} className="hidden md:block relative">
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
@@ -174,9 +169,9 @@ export function Navbar() {
               <User size={13} />
               Sign In
             </Link>
-          )}
+          )} */}
 
-          <Link
+          {/* <Link
             href="/cart"
             id="nav-cart"
             data-cursor="Cart"
@@ -199,7 +194,7 @@ export function Navbar() {
                 </motion.span>
               )}
             </AnimatePresence>
-          </Link>
+          </Link> */}
 
           <button
             id="nav-mobile-toggle"
@@ -254,13 +249,13 @@ export function Navbar() {
                 </Link>
               ))}
               <div className="gold-separator my-1" />
-              <Link
+              {/* <Link
                 href="/wishlist"
                 className="flex items-center gap-2 text-text-muted text-sm tracking-widest uppercase hover:text-gold transition-colors"
               >
                 <Heart size={14} />
                 Wishlist
-              </Link>
+              </Link> */}
               <Link
                 href="/track-order"
                 className="flex items-center gap-2 text-text-muted text-sm tracking-widest uppercase hover:text-gold transition-colors"
@@ -275,7 +270,7 @@ export function Navbar() {
                 <MapPin size={14} />
                 Addresses
               </Link>
-              {activeUser ? (
+              {/* {activeUser ? (
                 <>
                   <p className="text-text-light text-sm">
                     {activeUser?.name ?? activeUser?.email}
@@ -296,7 +291,7 @@ export function Navbar() {
                   <User size={14} />
                   Sign In
                 </Link>
-              )}
+              )} */}
             </div>
           </motion.div>
         )}

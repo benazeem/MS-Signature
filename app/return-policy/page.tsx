@@ -36,7 +36,7 @@ const sections = [
 
 export default function ReturnPolicyPage() {
   return (
-    <div className="pt-28 pb-20 min-h-screen">
+    <div className="pt-40 pb-20 min-h-screen">
       <div className="container-wide max-w-3xl">
         <ScrollReveal>
           <p className="text-gold text-xs tracking-[0.4em] uppercase mb-3">Policies</p>
