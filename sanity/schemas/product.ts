@@ -105,6 +105,21 @@ export default defineType({
       ],
     }),
     defineField({
+      name: "metaTitle",
+      title: "SEO Meta Title",
+      type: "string",
+      description: "Optional. Custom title for search engines. Falls back to product name.",
+      validation: (rule) => rule.max(60),
+    }),
+    defineField({
+      name: "metaDescription",
+      title: "SEO Meta Description",
+      type: "text",
+      rows: 3,
+      description: "Optional. Custom description for search engines. Falls back to tagline.",
+      validation: (rule) => rule.max(160),
+    }),
+    defineField({
       name: "inStock",
       title: "In Stock",
       type: "boolean",

@@ -18,7 +18,7 @@ const sections = [
   },
   {
     title: "Orders & Payment",
-    content: `By placing an order, you represent that you are at least 18 years of age. We reserve the right to refuse or cancel any order at our discretion.\n\nOrders can be placed via registered accounts (using secure Magic Link authentication) or via Guest Checkout. You are responsible for providing accurate shipping and email details.\n\nPayment is processed through Razorpay, a secure payment gateway. By making a payment, you agree to Razorpay's terms and conditions. We do not store payment card information.`,
+    content: `By placing an order, you represent that you are at least 18 years of age. We reserve the right to refuse or cancel any order at our discretion.\n\nOrders can be placed via registered accounts using Neon Auth or via Guest Checkout. You are responsible for providing accurate shipping and email details.\n\nPayment is processed through Razorpay, a secure payment gateway. By making a payment, you agree to Razorpay's terms and conditions. We do not store payment card information.`,
   },
   {
     title: "Intellectual Property",
@@ -44,7 +44,7 @@ const sections = [
 
 export default function TermsPage() {
   return (
-    <div className="pt-28 pb-20 min-h-screen">
+    <div className="pt-40 pb-20 min-h-screen">
       <div className="container-wide max-w-3xl">
         <ScrollReveal>
           <p className="text-gold text-xs tracking-[0.4em] uppercase mb-3">Legal</p>

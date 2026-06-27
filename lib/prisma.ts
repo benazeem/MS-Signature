@@ -5,9 +5,10 @@ import { PrismaPg } from "@prisma/adapter-pg";
 type PrismaSingleton = PrismaClient;
 
 const globalForPrisma = globalThis as unknown as { prisma?: PrismaSingleton };
+const databaseUrl = process.env.NEON_DATABASE_URL ?? process.env.DATABASE_URL;
 
 const prisma = globalForPrisma.prisma ?? (() => {
-  const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  const pool = new Pool({ connectionString: databaseUrl });
   const adapter = new PrismaPg(pool);
   return new PrismaClient({ adapter });
 })();

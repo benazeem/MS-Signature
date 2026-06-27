@@ -18,7 +18,7 @@ html {
   scroll-behavior: smooth;
 }
 
-body {
+body:not(:has(#sanity-studio-root)) {
   background-color: var(--color-primary);
   color: var(--color-text-light);
   font-family: var(--font-body);
@@ -26,25 +26,30 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-::selection {
+body:has(#sanity-studio-root) {
+  background: #fff;
+  color: #000;
+}
+
+body:not(:has(#sanity-studio-root)) ::selection {
   background-color: var(--color-gold);
   color: var(--color-primary);
 }
 
-::-webkit-scrollbar {
+body:not(:has(#sanity-studio-root))::-webkit-scrollbar {
   width: 6px;
 }
 
-::-webkit-scrollbar-track {
+body:not(:has(#sanity-studio-root))::-webkit-scrollbar-track {
   background: var(--color-primary);
 }
 
-::-webkit-scrollbar-thumb {
+body:not(:has(#sanity-studio-root))::-webkit-scrollbar-thumb {
   background: var(--color-border);
   border-radius: 3px;
 }
 
-::-webkit-scrollbar-thumb:hover {
+body:not(:has(#sanity-studio-root))::-webkit-scrollbar-thumb:hover {
   background: var(--color-gold);
 }
 

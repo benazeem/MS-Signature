@@ -38,7 +38,7 @@ const faqs = [
     questions: [
       {
         q: "Do I need to create an account to order?",
-        a: "No. You can shop and checkout as a guest. Simply provide your email address — we'll send a secure magic link to your inbox for instant verification, and then you can proceed to payment. Your email becomes your identifier for order tracking.",
+        a: "No. You can shop and checkout as a guest. For saved addresses, wishlist, reviews, and order history, sign in securely with Neon Auth. Your email becomes your identifier for order tracking.",
       },
       {
         q: "What payment methods do you accept?",
@@ -88,7 +88,7 @@ const faqs = [
 
 export default function FaqPage() {
   return (
-    <div className="pt-28 pb-20 min-h-screen">
+    <div className="pt-40 pb-20 min-h-screen">
       <div className="container-wide max-w-3xl">
         <ScrollReveal>
           <p className="text-gold text-xs tracking-[0.4em] uppercase mb-3">Support</p>

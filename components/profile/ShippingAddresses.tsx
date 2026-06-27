@@ -11,8 +11,7 @@ import {
   AlertCircle,
   Trash2,
 } from "lucide-react";
-import { useAuth } from "@/lib/supabase-auth-context";
-import { useGuestAuth } from "@/lib/guest-auth-context";
+import { useAuth } from "@/lib/auth-context";
 import { INDIAN_STATES } from "@/lib/constants";
 import { useToast } from "@/components/ui/Toast";
 import { motion, AnimatePresence } from "motion/react";
@@ -20,9 +19,8 @@ import { motion, AnimatePresence } from "motion/react";
 import { ShippingAddress } from "@/types/common.types";
 
 const ShippingAddressesComponent = () => {
-  const { user: supabaseUser } = useAuth();
-  const { user: guestUser } = useGuestAuth();
-  const email = supabaseUser?.email || guestUser?.email;
+  const { user } = useAuth();
+  const email = user?.email;
 
   const { showToast } = useToast();
   const [addresses, setAddresses] = useState<ShippingAddress[]>([]);

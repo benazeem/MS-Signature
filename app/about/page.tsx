@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="pt-28">
+    <div className="pt-40">
       <section className="container-wide py-20 text-center">
         <span className="text-gold text-xs tracking-[0.4em] uppercase block mb-6 animate-fade-in">
           Our Story

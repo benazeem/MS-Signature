@@ -22,6 +22,8 @@ export interface SanityProduct {
     price: number;
   }>;
   inStock: boolean;
+  metaTitle?: string;
+  metaDescription?: string;
 }
 
 export interface SanityCategory {

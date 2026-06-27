@@ -7,7 +7,7 @@ const ShippingAddresses = dynamic(
   () => import("@/components/profile/ShippingAddresses").then((mod) => mod.ShippingAddresses),
   {
     loading: () => (
-      <div className="pt-28 pb-20 min-h-screen flex items-center justify-center">
+      <div className="pt-40 pb-20 min-h-screen flex items-center justify-center">
         <Loader2 size={28} className="animate-spin text-gold" />
       </div>
     ),
@@ -16,7 +16,7 @@ const ShippingAddresses = dynamic(
 
 export default function ShippingAddressesPage() {
   return (
-    <div className="pt-28 pb-20 min-h-screen">
+    <div className="pt-40 pb-20 min-h-screen">
       <div className="container-wide max-w-5xl">
         <p className="text-gold text-xs tracking-[0.4em] uppercase mb-3">Profile</p>
         <h1 className="font-heading text-4xl md:text-5xl text-text-light mb-4">Shipping Addresses</h1>

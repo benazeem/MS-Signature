@@ -88,7 +88,7 @@ export function ShopClient({
   }, [products, selectedCategory, sortBy]);
 
   return (
-    <div className="pt-28 pb-20">
+    <div className="pt-40 pb-20">
       <div className="container-wide">
         <SectionHeader
           label="Our Collection"

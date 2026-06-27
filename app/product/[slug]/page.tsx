@@ -1,11 +1,14 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getProductBySlug as getSanityProductBySlug, getProducts } from "@/sanity/lib/client";
+import {
+  getProductBySlug as getSanityProductBySlug,
+  getProducts,
+} from "@/sanity/lib/client";
 import { ProductGallery } from "@/components/product/ProductGallery";
 import { ProductInfo } from "@/components/product/ProductInfo";
-import { ProductReviews } from "@/components/shop/ProductReviews";
-import { SITE_NAME } from "@/lib/constants";
+// import { ProductReviews } from "@/components/shop/ProductReviews";
+import { SITE_NAME, SITE_URL } from "@/lib/constants";
 import { Product } from "@/types/product.types";
 
 export async function generateStaticParams() {
@@ -30,13 +33,15 @@ async function getProduct(slug: string): Promise<Product | undefined> {
         tagline: p.tagline || "",
         description: p.description || "",
         price: p.price || 0,
-        category: (p.category as "oud" | "floral" | "musk") || "oud",
+        category: (p.category as "attar" | "perfume") || "attar",
         image: p.image || "/products/oud.png",
         images: p.images || [],
         featured: p.featured || false,
         bestSeller: p.bestSeller || false,
         notes: p.notes || { top: "", heart: "", base: "" },
         inStock: p.inStock ?? true,
+        metaTitle: p.metaTitle,
+        metaDescription: p.metaDescription,
         reviews: [],
       };
     }
@@ -55,12 +60,16 @@ export async function generateMetadata({
   const product = await getProduct(slug);
   if (!product) return { title: "Product Not Found" };
 
+  const title = product.metaTitle || `${product.name} — ${product.tagline}`;
+  const description =
+    product.metaDescription || product.description.slice(0, 160);
+
   return {
-    title: `${product.name} — ${product.tagline}`,
-    description: product.description.slice(0, 160),
+    title,
+    description,
     openGraph: {
       title: `${product.name} | ${SITE_NAME}`,
-      description: product.tagline,
+      description: description,
       images: [product.image],
     },
   };
@@ -78,43 +87,82 @@ export default async function ProductPage({
     notFound();
   }
 
+  const galleryImages = Array.from(
+    new Set([product.image, ...product.images].filter(Boolean)),
+  );
+
   return (
-    <div className="pt-28 pb-20">
-      <div className="container-wide">
-        {/* Breadcrumb */}
-        <nav className="mb-10 animate-fade-in" id="breadcrumb">
-          <ol className="flex items-center gap-2 text-xs text-text-muted">
-            <li>
-              <Link href="/" className="hover:text-gold transition-colors">
-                Home
-              </Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link href="/shop" className="hover:text-gold transition-colors">
-                Shop
-              </Link>
-            </li>
-            <li>/</li>
-            <li>
-              <Link href={`/shop?category=${product.category}`} className="hover:text-gold transition-colors capitalize">
-                {product.category}
-              </Link>
-            </li>
-            <li>/</li>
-            <li className="text-text-light">{product.name}</li>
-          </ol>
-        </nav>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org/",
+            "@type": "Product",
+            name: product.name,
+            image: product.image,
+            description: product.description,
+            brand: {
+              "@type": "Brand",
+              name: SITE_NAME,
+            },
+            offers: {
+              "@type": "Offer",
+              url: `${SITE_URL}/product/${product.slug}`,
+              priceCurrency: "INR",
+              price: product.price,
+              availability: product.inStock
+                ? "https://schema.org/InStock"
+                : "https://schema.org/OutOfStock",
+            },
+          }),
+        }}
+      />
+      <div className="pt-40 pb-20">
+        <div className="container-wide">
+          {/* Breadcrumb */}
+          <nav className="mb-10 animate-fade-in" id="breadcrumb">
+            <ol className="flex items-center gap-2 text-xs text-text-muted">
+              <li>
+                <Link href="/" className="hover:text-gold transition-colors">
+                  Home
+                </Link>
+              </li>
+              <li>/</li>
+              <li>
+                <Link
+                  href="/shop"
+                  className="hover:text-gold transition-colors"
+                >
+                  Shop
+                </Link>
+              </li>
+              <li>/</li>
+              <li>
+                <Link
+                  href={`/shop?category=${product.category}`}
+                  className="hover:text-gold transition-colors capitalize"
+                >
+                  {product.category}
+                </Link>
+              </li>
+              <li>/</li>
+              <li className="text-text-light">{product.name}</li>
+            </ol>
+          </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
-          <ProductGallery images={product.images} name={product.name} />
-          <ProductInfo product={product} />
-        </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20">
+            <ProductGallery images={galleryImages} name={product.name} />
+            <ProductInfo product={product} />
+          </div>
 
-        <div className="mt-24">
-          <ProductReviews productId={product.id} />
+          {/*
+          <div className="mt-24">
+            <ProductReviews productId={product.id} />
+          </div>
+          */}
         </div>
       </div>
-    </div>
+    </>
   );
 }

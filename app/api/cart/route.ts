@@ -1,19 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { jwtVerify } from "jose";
+import { getAuthSessionFromRequest } from "@/lib/auth";
 import { CartItem } from "@/types/cart.types";
 
-const JWT_SECRET = new TextEncoder().encode(process.env.SUPABASE_JWT_SECRET);
-
 async function getEmailFromRequest(req: NextRequest): Promise<string | null> {
-  const token = req.cookies.get("ms_guest_session")?.value;
-  if (!token) return null;
-  try {
-    const { payload } = await jwtVerify(token, JWT_SECRET);
-    return payload.email as string;
-  } catch {
-    return null;
-  }
+  const user = await getAuthSessionFromRequest(req);
+  return user?.email ?? null;
 }
 
 export async function GET(req: NextRequest) {

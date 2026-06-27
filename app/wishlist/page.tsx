@@ -2,6 +2,12 @@ import { getProducts } from "@/sanity/lib/client";
 import { products as fallbackProducts } from "@/lib/data";
 import { WishlistClient } from "./WishlistClient";
 import { Product } from "@/types/product.types";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Your Wishlist | MS Signature Scents",
+  description: "View and manage your favorite attar perfume oils saved for later.",
+};
 
 export default async function WishlistPage() {
   let sanityProducts: Product[] = [];
@@ -15,7 +21,7 @@ export default async function WishlistPage() {
       tagline: p.tagline || "",
       description: p.description || "",
       price: p.price || 0,
-      category: (p.category as "oud" | "floral" | "musk") || "oud",
+      category: (p.category as "attar" | "perfume") || "attar",
       image: p.image || "/products/oud.png",
       images: p.images || [],
       featured: p.featured || false,

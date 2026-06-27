@@ -1,6 +1,12 @@
 import { getProducts, getCategories } from "@/sanity/lib/client";
 import { ShopClient } from "./ShopClient";
 import { Product } from "@/types/product.types";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Shop All Attars | MS Signature Scents",
+  description: "Explore our complete collection of premium, alcohol-free attar perfume oils including Oud, Floral, and Musk blends.",
+};
 
 export default async function ShopPage() {
   let sanityProducts: Product[] = [];
@@ -16,7 +22,7 @@ export default async function ShopPage() {
       tagline: p.tagline || "",
       description: p.description || "",
       price: p.price || 0,
-      category: (p.category as "oud" | "floral" | "musk") || "oud",
+      category: (p.category as "attar" | "perfume") || "attar",
       image: p.image || "/products/oud.png",
       images: p.images || [],
       featured: p.featured || false,

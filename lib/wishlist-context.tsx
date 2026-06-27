@@ -1,8 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useMemo, useRef, useSyncExternalStore, type ReactNode } from "react";
-import { useGuestAuth } from "@/lib/guest-auth-context";
-import { useAuth } from "@/lib/supabase-auth-context";
+import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/components/ui/Toast";
 
 import { WishlistContextType } from "@/types/wishlist.types";
@@ -12,8 +11,7 @@ const EMPTY_WISHLIST: string[] = [];
 
 export function WishlistProvider({ children }: { children: ReactNode }) {
   const { showToast } = useToast();
-  const { user: guestUser } = useGuestAuth();
-  const { user: supabaseUser } = useAuth();
+  const { user } = useAuth();
 
   const snapshotRef = useRef<{ key: string | null; raw: string; parsed: string[] }>({
     key: null,
@@ -21,7 +19,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
     parsed: EMPTY_WISHLIST,
   });
 
-  const userEmail = supabaseUser?.email || guestUser?.email;
+  const userEmail = user?.email;
   const wishlistKey = useMemo(() => (userEmail ? `ms-wishlist-${userEmail}` : null), [userEmail]);
 
   const getWishlistSnapshot = useCallback((): string[] => {

@@ -13,8 +13,7 @@ export function CartItem({ item }: { item: CartItemType }) {
     <div
       className="flex gap-5 p-5 border border-border bg-accent/30"
       id={`cart-item-${item.product.id}-${item.size}`}
-    >
-      {/* Image */}
+    > 
       <div className="relative w-20 h-20 shrink-0 bg-primary/50">
         <Image
           src={item.product.image}
@@ -23,8 +22,7 @@ export function CartItem({ item }: { item: CartItemType }) {
           className="object-cover"
         />
       </div>
-
-      {/* Info */}
+ 
       <div className="flex-1 min-w-0">
         <h3 className="font-heading text-base text-text-light truncate">
           {item.product.name}
@@ -34,8 +32,7 @@ export function CartItem({ item }: { item: CartItemType }) {
           {formatPrice(itemPrice)}
         </p>
       </div>
-
-      {/* Quantity */}
+ 
       <div className="flex items-center gap-3 shrink-0">
         <button
           onClick={() =>
@@ -59,8 +56,7 @@ export function CartItem({ item }: { item: CartItemType }) {
           +
         </button>
       </div>
-
-      {/* Remove */}
+ 
       <button
         onClick={() => removeItem(item.product.id, item.size)}
         className="text-text-muted hover:text-red-400 transition-colors duration-300 shrink-0"
