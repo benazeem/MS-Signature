@@ -92,8 +92,8 @@ export function ShopClient({
       <div className="container-wide">
         <SectionHeader
           label="Our Collection"
-          title="Shop Attars"
-          subtitle="Explore our complete range of handcrafted perfume oils — sourced from the finest botanicals across India and the Middle East."
+          title="Welcome to MS Signature Scents"
+          subtitle="Discover a world of luxury fragrances at MS Signature Scents. Explore our exclusive collection of premium perfumes and pure attars, crafted for exceptional quality, lasting performance, and timeless elegance. Find your perfect signature scent and elevate every moment with a fragrance that leaves a lasting impression"
         />
 
         <div className="lg:hidden mb-6 flex items-center gap-3">

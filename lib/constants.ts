@@ -25,6 +25,9 @@ export const SIZES = [
   { label: "12ml", value: "12ml", price: 1200 },
 ] as const;
 
+// Default sizes for spray/perfume products
+// (Removed) PERFUME_SIZES: prefer defining sizes per-product in Sanity CMS
+
 export const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Shop", href: "/shop" },

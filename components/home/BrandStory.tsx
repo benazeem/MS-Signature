@@ -20,23 +20,21 @@ export function BrandStory() {
         <ScrollReveal delay={0.2}>
           <p className="text-text-muted text-base md:text-lg leading-relaxed mb-6">
             Every bottle of MS Signature Scents is a testament to generations of
-            perfumery knowledge. We source the rarest botanicals from across
-            India and the Middle East, distilling them using time-honored
-            methods that preserve every nuance of their natural beauty. Our
-            attars are concentrated perfume oils, entirely free from alcohol and
-            synthetic additives.
+            perfumery knowledge. We source the finest botanicals and craft each
+            fragrance using time-honored methods that preserve every nuance of
+            their natural beauty. Our attars are concentrated perfume oils,
+            entirely free from alcohol and synthetic additives.
           </p>
         </ScrollReveal>
 
         <ScrollReveal delay={0.3}>
           <p className="text-[#888] text-sm md:text-base leading-relaxed mb-8">
-            From the mystical forests of Assam where our Agarwood (Oud) is
-            sustainably harvested, to the dawn-picked Damascena roses of
-            Kannauj, each fragrance is a journey. We believe that a true
-            signature scent doesn&apos;t just mask-it elevates your presence.
+            Each fragrance is a journey of craftsmanship and excellence. We
+            believe that a true signature scent doesn&apos;t just mask — it
+            elevates your presence and leaves a lasting impression.
           </p>
           <p className="text-gold text-sm tracking-widest uppercase font-medium">
-            No synthetics. No shortcuts. Just pure, authentic attar.
+            No synthetics. No shortcuts. Just pure, authentic fragrance.
           </p>
           <div className="gold-separator max-w-[80px] mx-auto mt-10" />
         </ScrollReveal>
@@ -44,3 +42,4 @@ export function BrandStory() {
     </Section>
   );
 }
+

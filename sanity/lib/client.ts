@@ -81,6 +81,11 @@ export const FEATURED_PRODUCTS_QUERY = `
     bestSeller,
     "image": image.asset->url,
     "category": category->slug.current,
+    sizes[] {
+      label,
+      value,
+      price
+    },
     inStock
   }
 `;
