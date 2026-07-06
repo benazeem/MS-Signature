@@ -3,6 +3,8 @@ export interface ButtonProps
   variant?: "primary" | "secondary" | "outline" | "ghost" | "gold";
   size?: "sm" | "md" | "lg";
   href?: string;
+  target?: string;
+  rel?: string;
   isLoading?: boolean;
 }
 

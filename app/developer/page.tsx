@@ -1,14 +1,7 @@
 import Image from "next/image";
-import {
-  Mail,
-  MessageCircle,
-  Code2,
-  Database,
-  Cloud,
-  Layers,
-} from "lucide-react";
-import { Button } from "@/components/ui/Button";
+import { Code2, Database, Cloud, Layers } from "lucide-react";
 import { Section } from "@/components/ui/Section";
+import { DeveloperCtas } from "./DeveloperCtas";
 
 export const metadata = {
   title: "Mohd Azeem Malik | Full-Stack Developer",
@@ -61,7 +54,7 @@ export default function DeveloperPage() {
   return (
     <div className="pt-32 pb-20 overflow-hidden relative selection:bg-gold/30">
       {/* Background Decorative Elements */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-gold/3 blur-[120px] rounded-full pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-150 bg-gold/3 blur-[120px] rounded-full pointer-events-none" />
 
       <Section className="relative z-10">
         <div className="container-wide">
@@ -72,9 +65,10 @@ export default function DeveloperPage() {
                 <div className="relative w-48 h-48 md:w-64 md:h-64 rounded-2xl overflow-hidden border border-gold/20 p-1.5 bg-primary/40 backdrop-blur-sm rotate-3">
                   <div className="relative w-full h-full rounded-xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
                     <Image
-                      src="https://images.unsplash.com/photo-1635805737707-575885ab0820?q=80&w=1000&auto=format&fit=crop"
+                      src="/Mohd_Azeem_Malik.webp"
                       alt="Mohd Azeem Malik"
                       fill
+                      sizes="(max-width: 768px) 192px, (max-width: 1024px) 256px, 256px"
                       className="object-cover"
                       priority
                     />
@@ -95,22 +89,7 @@ export default function DeveloperPage() {
                   Beyond UI, my work emphasizes performance, system design, and
                   real-world SaaS workflows.
                 </p>
-                <div className="flex flex-wrap gap-4 justify-center lg:justify-start">
-                  <Button
-                    href="mailto:azeemkhandsari@gmail.com"
-                    variant="primary"
-                    className="gap-2"
-                  >
-                    <Mail size={16} /> Contact
-                  </Button>
-                  <Button
-                    href="https://wa.me/917895411144"
-                    variant="outline"
-                    className="gap-2"
-                  >
-                    <MessageCircle size={16} /> WhatsApp
-                  </Button>
-                </div>
+                <DeveloperCtas />
               </div>
             </div>
 

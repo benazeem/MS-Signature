@@ -1,5 +1,7 @@
+import Image from "next/image";
 import Link from "next/link";
 import { SITE_NAME } from "@/lib/constants";
+
 
 const footerLinks = {
   Shop: [
@@ -51,17 +53,16 @@ export function Footer() {
       <div className="container-wide py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           <div className="lg:col-span-2">
-            <Link
-              href="/"
-              className="flex flex-col items-start mb-6 group"
-              aria-label="Home"
-            >
-              <span className="font-(family-name:--font-cinzel) text-xl tracking-[0.15em] text-gold group-hover:text-soft-gold transition-colors duration-500">
-                MS SIGNATURE
-              </span>
-              <span className="block text-[8px] tracking-[0.4em] text-text-muted uppercase mt-0.5 group-hover:text-gold/70 transition-colors duration-500">
-                Scents
-              </span>
+            <Link href="/" className="flex items-center gap-4 mb-6 group" aria-label="Home">
+              <Image src="/MS_Signature_Logo.jpg" alt="MS Signature Logo" width={140} height={40} className="object-contain" />
+              <div className="hidden sm:block">
+                <span className="font-(family-name:--font-cinzel) text-base tracking-[0.15em] text-gold group-hover:text-soft-gold transition-colors duration-500">
+                  MS SIGNATURE
+                </span>
+                <span className="block text-[8px] tracking-[0.4em] text-text-muted uppercase mt-0.5 group-hover:text-gold/70 transition-colors duration-500">
+                  Scents
+                </span>
+              </div>
             </Link>
             <p className="text-text-muted text-sm leading-relaxed max-w-xs mb-6">
               Crafting pure, long-lasting attars with heritage methods. Every

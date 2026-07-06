@@ -40,6 +40,7 @@ async function getProduct(slug: string): Promise<Product | undefined> {
         bestSeller: p.bestSeller || false,
         notes: p.notes || { top: "", heart: "", base: "" },
         inStock: p.inStock ?? true,
+        sizes: p.sizes || [],
         metaTitle: p.metaTitle,
         metaDescription: p.metaDescription,
         reviews: [],

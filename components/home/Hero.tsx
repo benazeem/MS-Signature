@@ -38,7 +38,7 @@ export function Hero() {
             transition={{ duration: 0.6, ease: "easeOut" }}
             className="text-gold text-xs tracking-[0.4em] uppercase flex items-center gap-2 mb-6"
           >
-            <Sparkles size={14} /> Pure. Long-lasting. Timeless.
+            <Sparkles size={14} /> Premium Perfumes & Pure Attars
           </motion.span>
 
           <motion.h1
@@ -47,7 +47,8 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
             className="font-heading text-5xl md:text-6xl lg:text-7xl leading-[1.1] mb-8"
           >
-            The Art of <span className="text-gradient-gold">Fine Attar</span>
+            <span className="text-gradient-gold">Find Your</span>{" "}
+            Luxury
           </motion.h1>
 
           <motion.p
@@ -56,8 +57,8 @@ export function Hero() {
             transition={{ duration: 0.8, delay: 0.4, ease: "easeOut" }}
             className="text-text-muted text-base md:text-lg leading-relaxed mb-10 max-w-md"
           >
-            Handcrafted perfume oils distilled from nature&apos;s finest
-            botanicals. Experience fragrance the way it was meant to be.
+            Discover premium perfumes and pure attars crafted for excellence.
+            Long-lasting, luxurious, and designed to leave a lasting impression.
           </motion.p>
 
           <motion.div
@@ -87,8 +88,8 @@ export function Hero() {
           >
             {[
               { value: "100%", label: "Natural" },
-              { value: "50+", label: "Fragrances" },
-              { value: "10k+", label: "Happy Clients" },
+              { value: "10+", label: "Fragrances" },
+              { value: "5k+", label: "Happy Clients" },
             ].map((stat, i) => (
               <motion.div
                 key={stat.label}

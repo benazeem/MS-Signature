@@ -29,6 +29,7 @@ export default async function ShopPage() {
       bestSeller: p.bestSeller || false,
       notes: p.notes || { top: "", heart: "", base: "" },
       inStock: p.inStock ?? true,
+      sizes: p.sizes || [],
       reviews: [],
     }));
   } catch (error) {

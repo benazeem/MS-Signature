@@ -1,39 +1,15 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
-import { useCart } from "@/lib/cart-context";
-import { useAuth } from "@/lib/auth-context";
 import { NAV_LINKS } from "@/lib/constants";
-import {
-  ShoppingBag,
-  Package,
-  User,
-  LogOut,
-  X,
-  Menu,
-  Heart,
-  MapPin,
-} from "lucide-react";
+import { Package, X, Menu, MapPin } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export function Navbar() {
   const pathname = usePathname();
-  const { totalItems } = useCart();
-  const { user, signOut } = useAuth();
-
-  const activeUser = user
-    ? {
-        email: user.email,
-        name: user.user_metadata.full_name,
-      }
-    : null;
-
-  const handleSignOut = async () => {
-    await signOut();
-    setUserMenuOpen(false);
-  };
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement | null>(null);
@@ -59,16 +35,26 @@ export function Navbar() {
       <nav className="container-wide flex items-center justify-between h-20">
         <Link
           href="/"
-          className="flex flex-col items-center justify-center group"
+          className="flex items-center gap-3 group"
           id="nav-logo"
           aria-label="Home"
         >
-          <span className="font-(family-name:--font-cinzel) text-xl md:text-2xl tracking-[0.15em] text-gold group-hover:text-soft-gold transition-colors duration-500">
-            MS SIGNATURE
-          </span>
-          <span className="block text-[8px] md:text-[9px] tracking-[0.4em] text-text-muted uppercase mt-0.5 group-hover:text-gold/70 transition-colors duration-500">
-            Scents
-          </span>
+          <Image
+            src="/MS_Signature_Logo.jpg"
+            alt="MS Signature Logo"
+            width={120}
+            height={120}
+            className="w-auto h-12 sm:h-14 md:h-16 object-contain"
+            priority
+          />
+          <div className="hidden sm:flex flex-col">
+            <span className="font-(family-name:--font-cinzel) text-sm md:text-base tracking-[0.15em] text-gold group-hover:text-soft-gold transition-colors duration-500">
+              MS SIGNATURE
+            </span>
+            <span className="block text-[8px] tracking-[0.4em] text-text-muted uppercase mt-0.5 group-hover:text-gold/70 transition-colors duration-500">
+              Scents
+            </span>
+          </div>
         </Link>
 
         <div className="hidden md:flex items-center mr-0 mx-auto gap-10">
