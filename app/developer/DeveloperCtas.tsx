@@ -14,7 +14,7 @@ export function DeveloperCtas() {
             "noopener,noreferrer",
           )
         }
-        variant="primary"
+        variant="default"
         className="gap-2"
       >
         <Mail size={16} /> Contact

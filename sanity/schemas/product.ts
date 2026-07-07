@@ -95,8 +95,10 @@ export default defineType({
       ],
       validation: (rule) =>
         rule.custom(async (sizes, context) => {
-          const ctx = context as unknown as { document?: unknown };
-          const rawCat = ctx?.document?.category as unknown;
+          const ctx = context as {
+            document?: { category?: unknown };
+          };
+          const rawCat = ctx?.document?.category;
           let catRef: string | undefined;
           if (typeof rawCat === "string") {
             catRef = rawCat as string;
