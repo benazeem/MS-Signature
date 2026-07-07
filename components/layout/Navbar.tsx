@@ -242,7 +242,7 @@ export function Navbar() {
                 <Heart size={14} />
                 Wishlist
               </Link> */}
-              <Link
+              {/* <Link
                 href="/track-order"
                 className="flex items-center gap-2 text-text-muted text-sm tracking-widest uppercase hover:text-gold transition-colors"
               >
@@ -255,7 +255,7 @@ export function Navbar() {
               >
                 <MapPin size={14} />
                 Addresses
-              </Link>
+              </Link> */}
               {/* {activeUser ? (
                 <>
                   <p className="text-text-light text-sm">
