@@ -14,11 +14,11 @@ const sections = [
   },
   {
     title: "Delivery Timelines",
-    content: `Standard Delivery: 3–7 business days across India.\n\nExpress Delivery: 1–2 business days (available in select pin codes at additional cost).\n\nRemote/Hilly Areas: 7–12 business days due to logistical constraints.`,
+    content: `Standard Delivery: 3–7 business days across India.\n\nExpress Delivery: 1–2 business days (where available, optional ₹199).\n\nRemote/Hilly Areas: 7–12 business days due to logistical constraints.`,
   },
   {
     title: "Shipping Charges",
-    content: `Free Shipping: On all orders above ₹999.\n\nStandard Shipping: ₹99 for orders below ₹999.\n\nExpress Shipping: ₹199 (where applicable).\n\nAll shipments are fully insured against loss or damage during transit.`,
+    content: `Free Shipping: Shipping is free on all orders — we do not charge for standard delivery.\n\nExpress Shipping: ₹199 where available (optional).\n\nAll shipments are fully insured against loss or damage during transit.`,
   },
   {
     title: "Packaging",

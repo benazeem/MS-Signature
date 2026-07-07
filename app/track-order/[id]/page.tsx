@@ -538,6 +538,7 @@ export default function OrderDetailPage() {
             >
               <button
                 onClick={() => setReviewProduct(null)}
+                aria-label="Close review modal"
                 className="absolute top-4 right-4 text-text-muted hover:text-text-light transition-colors"
               >
                 <X size={20} />
@@ -561,6 +562,7 @@ export default function OrderDetailPage() {
                         key={s}
                         type="button"
                         onClick={() => setRating(s)}
+                        aria-label={`Rate ${s} star${s === 1 ? "" : "s"}`}
                         className="p-1 hover:scale-110 transition-transform"
                       >
                         <Star
@@ -615,6 +617,7 @@ export default function OrderDetailPage() {
                               prev.filter((_, i) => i !== index),
                             )
                           }
+                          aria-label="Remove uploaded image"
                           className="absolute top-1 right-1 bg-black/50 rounded-full p-0.5 hover:bg-red-500 transition-colors"
                         >
                           <X size={12} className="text-white" />
@@ -626,6 +629,7 @@ export default function OrderDetailPage() {
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploadingImage}
+                        aria-label="Upload review image"
                         className="w-16 h-16 rounded-md border border-dashed border-border flex items-center justify-center hover:border-gold hover:text-gold transition-colors text-text-muted"
                       >
                         {uploadingImage ? (
@@ -640,6 +644,7 @@ export default function OrderDetailPage() {
                       accept="image/*"
                       ref={fileInputRef}
                       onChange={handleImageUpload}
+                      aria-label="Upload review image"
                       className="hidden"
                     />
                   </div>

@@ -1,33 +1,29 @@
-export function formatPrice(price: number): string {
+import { clsx, type ClassValue } from "clsx"
+import { twMerge } from "tailwind-merge"
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs))
+}
+
+export function formatPrice(value: number) {
   return new Intl.NumberFormat("en-IN", {
     style: "currency",
     currency: "INR",
-    minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(price);
+  }).format(value)
 }
 
-export function cn(
-  ...classes: (string | boolean | undefined | null)[]
-): string {
-  return classes.filter(Boolean).join(" ");
-}
+export function getAllowedProductSizes(
+  category: "attar" | "perfume",
+  sizes: { label: string; value: string; price: number }[] = [],
+) {
+  if (sizes.length > 0) {
+    return sizes
+  }
 
-export function slugify(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/[^\w\s-]/g, "")
-    .replace(/\s+/g, "-")
-    .trim();
-}
+  if (category === "attar") {
+    return [{ label: "6ml", value: "6ml", price: 0 }]
+  }
 
-export function getURL() {
-  let url =
-    process?.env?.NEXT_PUBLIC_SITE_URL ??
-    process?.env?.NEXT_PUBLIC_VERCEL_URL ??
-    "http://localhost:3000";
-
-  url = url.includes("http") ? url : `https://${url}`;
-  url = url.endsWith("/") ? url.slice(0, -1) : url;
-  return url;
+  return [{ label: "30ml", value: "30ml", price: 0 }]
 }

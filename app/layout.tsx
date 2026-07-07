@@ -7,6 +7,8 @@ import { AuthProvider } from "@/lib/auth-context";
 import { ToastProvider } from "@/components/ui/Toast";
 import { ClientLayout } from "@/components/layout/ClientLayout";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants";
+import { cn } from "@/lib/utils";
+
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -76,7 +78,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${inter.variable} ${cinzel.variable}`}
+      className={cn(playfair.variable, inter.variable, cinzel.variable, "font-sans")}
       data-scroll-behavior="smooth"
     >
       <head>
@@ -115,7 +117,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className="min-h-screen flex flex-col" suppressHydrationWarning>
+      <body className="min-h-screen flex flex-col bg-black" suppressHydrationWarning>
         <AuthProvider>
           <ToastProvider>
             <CartProvider>

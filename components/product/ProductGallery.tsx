@@ -40,7 +40,6 @@ export function ProductGallery({
               }`}
               id={`gallery-thumb-${i}`}
               aria-label={`Select image ${i + 1} for ${name}`}
-              aria-pressed={i === activeIndex}
             >
               <Image
                 src={img}

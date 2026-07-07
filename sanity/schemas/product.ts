@@ -93,6 +93,46 @@ export default defineType({
           },
         },
       ],
+      validation: (rule) =>
+        rule.custom(async (sizes, context) => {
+          const ctx = context as {
+            document?: { category?: unknown };
+          };
+          const rawCat = ctx?.document?.category;
+          let catRef: string | undefined;
+          if (typeof rawCat === "string") {
+            catRef = rawCat as string;
+          } else if (typeof rawCat === "object" && rawCat !== null && "_ref" in (rawCat as object)) {
+            catRef = (rawCat as { _ref?: unknown })._ref as string | undefined;
+          }
+          if (!catRef) return true;
+          try {
+            const client = context.getClient({ apiVersion: "2024-01-01" });
+            const cat = await client.getDocument(catRef);
+            const attarAllowed = ["6ml", "12ml"];
+            const perfumeAllowed = ["30ml"];
+
+            if (cat?.slug?.current === "attar" || (cat?.name && String(cat.name).toLowerCase() === "attar")) {
+              const invalid = (sizes || []).filter((s: unknown) => {
+                const val = typeof s === "object" && s !== null && "value" in s ? (s as { value?: unknown }).value : undefined;
+                return typeof val !== "string" || !attarAllowed.includes(val);
+              });
+              if (invalid.length) return "Attar products can only have sizes 6ml or 12ml.";
+            }
+
+            if (cat?.slug?.current === "perfume" || (cat?.name && String(cat.name).toLowerCase() === "perfume")) {
+              const invalid = (sizes || []).filter((s: unknown) => {
+                const val = typeof s === "object" && s !== null && "value" in s ? (s as { value?: unknown }).value : undefined;
+                return typeof val !== "string" || !perfumeAllowed.includes(val);
+              });
+              if (invalid.length) return "Perfume products can only have size 30ml.";
+            }
+
+            return true;
+          } catch {
+            return true;
+          }
+        }),
     }),
     defineField({
       name: "notes",

@@ -4,7 +4,7 @@ import { ScrollReveal } from "@/components/ui/ScrollReveal";
 export function BrandStory() {
   return (
     <Section id="brand-story" className="relative overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/5 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/4 rounded-full blur-[120px] pointer-events-none" />
 
       <div className="max-w-3xl mx-auto text-center relative z-10">
         <ScrollReveal>

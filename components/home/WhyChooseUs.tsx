@@ -45,7 +45,7 @@ const features = [
 export function WhyChooseUs() {
   return (
     <Section id="why-choose-us" className="relative overflow-hidden">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gold/3 rounded-full blur-[150px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/3 rounded-full blur-[150px] pointer-events-none" />
 
       <SectionHeader
         label="Why Us"

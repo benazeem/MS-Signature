@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 export function CartSummary() {
   const router = useRouter();
   const { totalPrice, totalItems } = useCart();
-  const shipping = totalPrice > 999 ? 0 : 99;
+  const shipping = 0; // Shipping is free on all orders
   const finalTotal = totalPrice + shipping;
 
   return (
@@ -26,19 +26,8 @@ export function CartSummary() {
         </div>
         <div className="flex justify-between">
           <span className="text-text-muted">Shipping</span>
-          <span className="text-text-light">
-            {shipping === 0 ? (
-              <span className="text-gold">Free</span>
-            ) : (
-              formatPrice(shipping)
-            )}
-          </span>
+          <span className="text-gold">Free</span>
         </div>
-        {shipping > 0 && (
-          <p className="text-text-muted text-xs">
-            Free shipping on orders above ₹999
-          </p>
-        )}
 
         <div className="gold-separator my-4" />
 

@@ -38,4 +38,6 @@ export const EMAIL_FROM = (
   process.env.EMAIL_FROM || "hello@demomailtrap.com"
 ).trim();
 
-export const ADMIN_EMAIL = process.env.WEBSITE_EMAIL;
+export const ADMIN_EMAIL = (
+  process.env.ADMIN_EMAIL || process.env.WEBSITE_EMAIL || ""
+).trim();

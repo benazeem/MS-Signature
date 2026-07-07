@@ -1,5 +1,12 @@
 import { Product } from "@/types/product.types";
 
+const ATTAR_SIZES = [
+  { label: "6ml", value: "6ml", price: 0 },
+  { label: "12ml", value: "12ml", price: 250 },
+];
+
+const PERFUME_SIZES = [{ label: "30ml", value: "30ml", price: 0 }];
+
 export const products: Product[] = [
   // ═══════════════════════════════════════
   //  ATTARS (base ₹349 for 6ml)
@@ -25,11 +32,7 @@ export const products: Product[] = [
       heart: "Jasmine, Orange Blossom",
       base: "Vanilla, Cedarwood, Cashmere Wood",
     },
-    sizes: [
-      { label: "6ml", value: "6ml", price: 0 },
-      { label: "12ml", value: "12ml", price: 250 },
-      { label: "30ml", value: "30ml", price: 750 },
-    ],
+    sizes: ATTAR_SIZES,
     inStock: true,
     metaTitle: "Black Opium Attar | MS Signature Scents – Bold Coffee & Vanilla Fragrance",
     metaDescription:
@@ -57,11 +60,7 @@ export const products: Product[] = [
       heart: "Oud Wood, Rose, Amber",
       base: "Sandalwood, Musk, Vetiver",
     },
-    sizes: [
-      { label: "6ml", value: "6ml", price: 0 },
-      { label: "12ml", value: "12ml", price: 250 },
-      { label: "30ml", value: "30ml", price: 750 },
-    ],
+    sizes: ATTAR_SIZES,
     inStock: true,
     metaTitle: "Oud Grand Attar | MS Signature Scents – Luxurious Oud & Amber Fragrance",
     metaDescription:
@@ -89,11 +88,7 @@ export const products: Product[] = [
       heart: "Warm Woods, Amber",
       base: "Vanilla, Musk, Benzoin",
     },
-    sizes: [
-      { label: "6ml", value: "6ml", price: 0 },
-      { label: "12ml", value: "12ml", price: 250 },
-      { label: "30ml", value: "30ml", price: 750 },
-    ],
+    sizes: ATTAR_SIZES,
     inStock: true,
     metaTitle: "Amir Al Oudh Attar | MS Signature Scents – Rich Oud & Vanilla Fragrance",
     metaDescription:
@@ -121,11 +116,7 @@ export const products: Product[] = [
       heart: "Lavender, Geranium, Sage",
       base: "Cedarwood, White Musk, Amber",
     },
-    sizes: [
-      { label: "6ml", value: "6ml", price: 0 },
-      { label: "12ml", value: "12ml", price: 250 },
-      { label: "30ml", value: "30ml", price: 750 },
-    ],
+    sizes: ATTAR_SIZES,
     inStock: true,
     metaTitle: "Fortune Attar | MS Signature Scents – Fresh Citrus & Woody Fragrance",
     metaDescription:
@@ -153,11 +144,7 @@ export const products: Product[] = [
       heart: "Rose, Jasmine, Gardenia",
       base: "Patchouli, Musk, Sandalwood",
     },
-    sizes: [
-      { label: "6ml", value: "6ml", price: 0 },
-      { label: "12ml", value: "12ml", price: 250 },
-      { label: "30ml", value: "30ml", price: 750 },
-    ],
+    sizes: ATTAR_SIZES,
     inStock: true,
     metaTitle: "Gucci Flora Attar | MS Signature Scents – Elegant Floral Fragrance",
     metaDescription:
@@ -189,6 +176,7 @@ export const products: Product[] = [
       heart: "Jasmine, Orange Blossom",
       base: "Vanilla, Cedarwood, Cashmere Wood",
     },
+    sizes: PERFUME_SIZES,
     inStock: true,
     metaTitle: "Black Opium Perfume | MS Signature Scents – Bold Coffee & Vanilla Spray",
     metaDescription:
@@ -216,6 +204,7 @@ export const products: Product[] = [
       heart: "Oud Wood, Rose, Amber",
       base: "Sandalwood, Musk, Vetiver",
     },
+    sizes: PERFUME_SIZES,
     inStock: true,
     metaTitle: "Oud Grand Perfume | MS Signature Scents – Luxurious Oud & Amber Spray",
     metaDescription:
@@ -243,6 +232,7 @@ export const products: Product[] = [
       heart: "Warm Woods, Amber",
       base: "Vanilla, Musk, Benzoin",
     },
+    sizes: PERFUME_SIZES,
     inStock: true,
     metaTitle: "Amir Al Oudh Perfume | MS Signature Scents – Rich Oud & Vanilla Spray",
     metaDescription:
@@ -270,6 +260,7 @@ export const products: Product[] = [
       heart: "Lavender, Geranium, Sage",
       base: "Cedarwood, White Musk, Amber",
     },
+    sizes: PERFUME_SIZES,
     inStock: true,
     metaTitle: "Fortune Perfume | MS Signature Scents – Fresh Citrus & Woody Spray",
     metaDescription:
@@ -297,6 +288,7 @@ export const products: Product[] = [
       heart: "Rose, Jasmine, Gardenia",
       base: "Patchouli, Musk, Sandalwood",
     },
+    sizes: PERFUME_SIZES,
     inStock: true,
     metaTitle: "Gucci Flora Perfume | MS Signature Scents – Elegant Floral Spray",
     metaDescription:

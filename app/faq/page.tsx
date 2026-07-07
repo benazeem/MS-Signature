@@ -12,6 +12,10 @@ const faqs = [
     category: "About Our Attars",
     questions: [
       {
+        q: "What sizes are available for attars and perfumes?",
+        a: "Our attars are available in 6ml and 12ml sizes only. Perfumes are stocked as 30ml spray bottles. Product pages indicate available sizes for each fragrance.",
+      },
+      {
         q: "What is attar (ittar)?",
         a: "Attar, also known as ittar, is a natural perfume oil derived from botanical sources such as flowers, wood, and resins through traditional steam or hydro-distillation. Unlike modern synthetic perfumes, attars are alcohol-free, long-lasting, and deeply personal fragrances.",
       },
@@ -59,11 +63,11 @@ const faqs = [
     questions: [
       {
         q: "How long does delivery take?",
-        a: "Standard delivery takes 3–7 business days across India. Express delivery (1–2 days) is available in select cities at ₹199 extra.",
+        a: "Standard delivery takes 3–7 business days across India. Express delivery (1–2 days) is available where offered for an optional fee of ₹199.",
       },
       {
         q: "Is shipping free?",
-        a: "Yes! Shipping is free on all orders above ₹999. For orders below ₹999, a flat shipping charge of ₹99 applies.",
+        a: "Yes — shipping is free on all orders. There are no shipping charges.",
       },
       {
         q: "How can I track my order?",
