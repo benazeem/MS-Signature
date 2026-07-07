@@ -28,10 +28,11 @@ type CatalogProduct = {
 export const metadata: Metadata = {
   title: "Attar Size Guide",
   description:
-    "Learn which attar and perfume size is right for you. Compare the current Sanity catalog sizes and how long they last.",
+    "Learn which attar size is right for you. Compare the current Sanity catalog sizes and how long they last.",
 };
 
 const sizeLabelPriority = ["6ml", "12ml"];
+const allowedAttarSizes = new Set(["6ml", "12ml"]);
 
 function formatRupees(value: number) {
   return new Intl.NumberFormat("en-IN", {
@@ -75,49 +76,45 @@ function buildCard(
 ): GuideCard {
   const totalPrice = basePrice + size.price;
 
-  if (category === "attar") {
-    switch (size.value) {
-      case "6ml":
-        return {
-          size: size.label,
-          title: "Discovery",
-          price: `From ${formatRupees(totalPrice)}`,
-          ideal: "First-time buyers, travel, sampling new scents",
-          applications: "~120-150 applications",
-          duration: "1-2 months (daily use)",
-          gift: false,
-          description:
-            "Compact and easy to carry. The 6ml size is ideal when you want to try a fragrance before moving up to a larger bottle.",
-        };
-      case "12ml":
-        return {
-          size: size.label,
-          title: "Essential",
-          price: `From ${formatRupees(totalPrice)}`,
-          ideal: "Regular users, everyday wear, gifting",
-          applications: "~250-300 applications",
-          duration: "3-5 months (daily use)",
-          gift: true,
-          description:
-            "The balanced everyday option. 12ml gives you more room to wear a favourite fragrance often without moving to a collector size.",
-          popular: true,
-        };
-      default:
-        break;
-    }
+  switch (size.value) {
+    case "6ml":
+      return {
+        size: size.label,
+        title: "Discovery",
+        price: `From ${formatRupees(totalPrice)}`,
+        ideal: "First-time buyers, travel, sampling new scents",
+        applications: "~120-150 applications",
+        duration: "1-2 months (daily use)",
+        gift: false,
+        description:
+          "Compact and easy to carry. The 6ml size is ideal when you want to try a fragrance before moving up to a larger bottle.",
+      };
+    case "12ml":
+      return {
+        size: size.label,
+        title: "Essential",
+        price: `From ${formatRupees(totalPrice)}`,
+        ideal: "Regular users, everyday wear, gifting",
+        applications: "~250-300 applications",
+        duration: "3-5 months (daily use)",
+        gift: true,
+        description:
+          "The balanced everyday option. 12ml gives you more room to wear a favourite fragrance often without moving to a collector size.",
+        popular: true,
+      };
+    default:
+      return {
+        size: size.label,
+        title: "Standard Spray",
+        price: `From ${formatRupees(totalPrice)}`,
+        ideal: "Everyday wear, gifting, travel",
+        applications: "~250-300 sprays",
+        duration: "2-4 months (daily use)",
+        gift: true,
+        description:
+          "Perfumes in the current catalog are stocked as spray bottles. Use this size when you want a clean, easy-to-wear daily fragrance.",
+      };
   }
-
-  return {
-    size: size.label,
-    title: "Standard Spray",
-    price: `From ${formatRupees(totalPrice)}`,
-    ideal: "Everyday wear, gifting, travel",
-    applications: "~250-300 sprays",
-    duration: "2-4 months (daily use)",
-    gift: true,
-    description:
-      "Perfumes in the current catalog are stocked as spray bottles. Use this size when you want a clean, easy-to-wear daily fragrance.",
-  };
 }
 
 function buildGuideCards(
@@ -138,6 +135,10 @@ function buildGuideCards(
 
   for (const product of categoryProducts) {
     for (const size of product.sizes ?? []) {
+      if (!allowedAttarSizes.has(size.value)) {
+        continue;
+      }
+
       if (!sizeMap.has(size.value)) {
         sizeMap.set(size.value, size);
       }

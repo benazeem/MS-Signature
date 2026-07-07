@@ -17,8 +17,14 @@ export function getAllowedProductSizes(
   category: "attar" | "perfume",
   sizes: { label: string; value: string; price: number }[] = [],
 ) {
+  const allowedValues = category === "attar" ? ["6ml", "12ml"] : ["30ml"];
+
   if (sizes.length > 0) {
-    return sizes
+    const filteredSizes = sizes.filter((size) => allowedValues.includes(size.value))
+
+    if (filteredSizes.length > 0) {
+      return filteredSizes
+    }
   }
 
   if (category === "attar") {
