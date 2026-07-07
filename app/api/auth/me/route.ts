@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { createNeonAuth } from "@neondatabase/auth/next/server";
 
 const auth = createNeonAuth({
@@ -8,7 +8,7 @@ const auth = createNeonAuth({
   },
 });
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     const { data: session, error } = await auth.getSession();
     if (error || !session?.user) {

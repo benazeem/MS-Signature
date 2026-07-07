@@ -20,11 +20,18 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
+      <a
+        href="#content"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 bg-gold text-primary px-3 py-2 rounded-md"
+        aria-label="Skip to main content"
+      >
+        Skip to content
+      </a>
       <CustomCursor />
       <WhatsAppButton />
       <Navbar />
       {pathname === "/" && <div className="h-14 sm:h-16 lg:h-20" />}
-      <main className="flex-1 relative">{children}</main>
+      <main id="content" className="flex-1 relative">{children}</main>
       <Footer />
     </>
   );

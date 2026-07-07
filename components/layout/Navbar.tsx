@@ -42,9 +42,9 @@ export function Navbar() {
           <Image
             src="/MS_Signature_Logo.jpg"
             alt="MS Signature Logo"
-            width={120}
-            height={120}
-            className="w-auto h-12 sm:h-14 md:h-16 object-contain"
+            width={160}
+            height={48}
+            className="object-contain h-12 sm:h-14 md:h-16"
             priority
           />
           <div className="hidden sm:flex flex-col">

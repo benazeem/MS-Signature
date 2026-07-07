@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client";
 
 import Image from "next/image";
@@ -6,30 +5,23 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
-import { Plus, Minus, Heart, ShoppingBag } from "lucide-react";
-import { formatPrice } from "@/lib/utils";
-import { useWishlist } from "@/lib/wishlist-context";
+import { Plus, Minus, ShoppingBag } from "lucide-react";
+import { formatPrice, getAllowedProductSizes } from "@/lib/utils";
 import { useCart } from "@/lib/cart-context";
-import { useToast } from "@/components/ui/Toast";
 import { Product } from "@/types/product.types";
 import { Badge } from "@/components/ui/Badge";
 import { Tilt3D } from "@/components/ui/Tilt3D";
-import { SIZES } from "@/lib/constants";
 
 export function ProductCard({
   product,
-  index = 0,
 }: {
   product: Product;
-  index?: number;
 }) {
-  const { isWishlisted, toggleWishlist } = useWishlist();
-  const { addItem, removeItem, updateQuantity, items } = useCart();
-  const { showToast } = useToast();
-  const wishlisted = isWishlisted(product.id);
+  const { /*addItem,*/ removeItem, updateQuantity, items } = useCart();
 
-  const hasSizes = product.sizes && product.sizes.length > 0;
-  const initialSize = hasSizes ? product.sizes![0].value : "";
+  const availableSizes = getAllowedProductSizes(product.category, product.sizes ?? []);
+  const hasSizes = availableSizes && availableSizes.length > 0;
+  const initialSize = hasSizes ? availableSizes[0].value : "";
   const [selectedSize, setSelectedSize] = useState<string>(initialSize);
   const [showSizes, setShowSizes] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -41,7 +33,7 @@ export function ProductCard({
   }, []);
 
   const selectedSizeDef = hasSizes
-    ? product.sizes!.find((s) => s.value === selectedSize) ?? product.sizes![0]
+    ? availableSizes.find((s) => s.value === selectedSize) ?? availableSizes[0]
     : null;
   const finalPrice = product.price + (selectedSizeDef ? selectedSizeDef.price : 0);
 
@@ -80,14 +72,10 @@ export function ProductCard({
       scale={1.02}
       maxTilt={6}
     >
-      <div
-        style={{ animationDelay: `${index * 0.1}s` }}
-        id={`product-card-${product.slug}`}
-        className="flex flex-col h-full"
-      >
+      <div className="flex flex-col h-full">
         <Link
           href={`/product/${product.slug}`}
-          className="block relative h-[300px] product-image-hover bg-primary/50 shrink-0"
+          className="block relative h-75 product-image-hover bg-primary/50 shrink-0"
         >
           <Image
             src={product.image}
@@ -117,7 +105,7 @@ export function ProductCard({
                 initial={{ scale: 0, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 exit={{ scale: 0, opacity: 0 }}
-                className="absolute top-3 right-12 w-6 h-6 bg-gold text-primary text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg"
+                  className="absolute top-3 right-12 w-6 h-6 bg-gold text-primary text-[10px] font-bold rounded-full flex items-center justify-center shadow-lg min-w-4"
               >
                 {cartQty}
               </motion.div>
@@ -173,7 +161,7 @@ export function ProductCard({
                     className="overflow-hidden"
                   >
                     <div className="flex gap-1.5 mt-2">
-                      {product.sizes!.map((size) => (
+                      {availableSizes.map((size) => (
                         <button
                           key={size.value}
                           onClick={() => {
@@ -201,7 +189,7 @@ export function ProductCard({
             </div>
           )}
 
-          <div className="flex items-center justify-between mt-auto">
+            <div className="flex items-center justify-between mt-auto">
             <div>
               <span className="text-gold font-heading text-lg">
                 {formatPrice(finalPrice)}
@@ -211,6 +199,7 @@ export function ProductCard({
                   for {selectedSize}
                 </span>
               )}
+              <p className="text-text-muted text-[10px] mt-1">Free delivery on all orders</p>
             </div>
 
             <AnimatePresence mode="wait">
@@ -226,18 +215,16 @@ export function ProductCard({
                   <button
                     onClick={handleDecrease}
                     className="w-5 h-5 flex items-center justify-center text-text-muted hover:text-red-400 transition-colors"
-                    id={`cart-decrease-${product.slug}-${selectedSize}`}
                     aria-label="Decrease quantity"
                   >
                     <Minus size={10} />
                   </button>
-                  <span className="text-gold font-heading text-sm min-w-[16px] text-center">
+                  <span className="text-gold font-heading text-sm min-w-4 text-center">
                     {cartQty}
                   </span>
                   <button
                     onClick={handleIncrease}
                     className="w-5 h-5 flex items-center justify-center text-text-muted hover:text-gold transition-colors"
-                    id={`cart-increase-${product.slug}-${selectedSize}`}
                     aria-label="Increase quantity"
                   >
                     <Plus size={10} />
@@ -257,7 +244,6 @@ export function ProductCard({
                       ? "border-white/10 text-text-muted/40 cursor-not-allowed bg-white/5"
                       : "border-border text-text-muted hover:border-gold hover:text-gold hover:bg-gold/5"
                   }`}
-                  id={`add-to-cart-${product.slug}`}
                   data-cursor={product.inStock ? "Add" : "Disabled"}
                 >
                   <ShoppingBag size={11} />
@@ -268,6 +254,8 @@ export function ProductCard({
           </div>
         </div>
       </div>
+
+        
 
       {mounted && showConfirmModal && createPortal(
         <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/70 backdrop-blur-md">

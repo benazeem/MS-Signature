@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { formatPrice } from "@/lib/utils";
+import { getAllowedProductSizes } from "@/lib/utils";
 // import { useCart } from "@/lib/cart-context";
 // import { useWishlist } from "@/lib/wishlist-context";
 import { Button } from "@/components/ui/Button";
@@ -10,9 +11,10 @@ import { Button } from "@/components/ui/Button";
 import { Product } from "@/types/product.types";
 
 export function ProductInfo({ product }: { product: Product }) {
-  const hasSizes = product.sizes && product.sizes.length > 0;
+  const availableSizes = getAllowedProductSizes(product.category, product.sizes ?? []);
+  const hasSizes = availableSizes.length > 0;
   const [selectedSize, setSelectedSize] = useState(
-    hasSizes ? product.sizes![0] : { label: "", value: "", price: 0 },
+    hasSizes ? availableSizes[0] : { label: "", value: "", price: 0 },
   );
   // const { addItem } = useCart();
   // const { isWishlisted, toggleWishlist } = useWishlist();
@@ -21,7 +23,6 @@ export function ProductInfo({ product }: { product: Product }) {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
     setMounted(true);
   }, []);
 
@@ -65,6 +66,10 @@ export function ProductInfo({ product }: { product: Product }) {
         )}
       </div>
 
+      <p className="text-text-muted text-xs tracking-[0.25em] uppercase">
+        Free delivery on all orders
+      </p>
+
       <div className="gold-separator" />
 
       <p className="text-text-muted text-sm leading-relaxed">
@@ -91,7 +96,7 @@ export function ProductInfo({ product }: { product: Product }) {
             Size
           </span>
           <div className="flex gap-3">
-            {product.sizes!.map((size) => (
+            {availableSizes.map((size) => (
               <button
                 key={size.value}
                 onClick={() => setSelectedSize(size)}
@@ -101,7 +106,6 @@ export function ProductInfo({ product }: { product: Product }) {
                     : "border border-border text-text-muted hover:border-gold hover:text-gold"
                 }`}
                 id={`size-${size.value}`}
-                aria-pressed={selectedSize.value === size.value}
               >
                 {size.label}
               </button>

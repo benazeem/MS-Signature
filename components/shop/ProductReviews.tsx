@@ -4,6 +4,10 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Star, Loader2, User, Image as ImageIcon, X } from "lucide-react";
 import { useAuth } from "@/lib/auth-context";
 import { useToast } from "@/components/ui/Toast";
+import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
 
 import { Review } from "@/types/product.types";
@@ -42,7 +46,9 @@ export function ProductReviews({ productId }: { productId: string }) {
   }, [productId]);
 
   useEffect(() => {
-    fetchReviews();
+    queueMicrotask(() => {
+      fetchReviews();
+    });
   }, [fetchReviews]);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -183,82 +189,94 @@ export function ProductReviews({ productId }: { productId: string }) {
             {userEmail && canReview ? (
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label className="text-text-muted text-xs tracking-widest uppercase mb-2 block">Rating</label>
+                  <Label className="text-text-muted text-xs tracking-widest uppercase mb-2 block">
+                    Rating
+                  </Label>
                   <div className="flex gap-1">
                     {[1, 2, 3, 4, 5].map((star) => (
-                      <button
+                      <Button
                         key={star}
                         type="button"
                         onClick={() => setRating(star)}
-                        className="p-1 hover:scale-110 transition-transform"
+                        aria-label={`Set rating to ${star} star${star === 1 ? "" : "s"}`}
+                        variant="ghost"
+                        size="icon-xs"
+                        className="hover:scale-110"
                       >
                         <Star
                           size={24}
                           className={star <= rating ? "text-gold fill-gold" : "text-border hover:text-gold/50"}
                         />
-                      </button>
+                      </Button>
                     ))}
                   </div>
                 </div>
-                
+
                 <div>
-                  <label htmlFor="comment" className="text-text-muted text-xs tracking-widest uppercase mb-2 block">
+                  <Label htmlFor="comment" className="text-text-muted text-xs tracking-widest uppercase mb-2 block">
                     Your Review
-                  </label>
-                  <textarea
+                  </Label>
+                  <Textarea
                     id="comment"
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                     placeholder="What did you think of this attar?"
-                    className="w-full bg-primary border border-border rounded-lg p-3 text-sm text-text-light placeholder:text-border focus:border-gold/50 focus:outline-none transition-colors min-h-30 resize-y"
+                    className="min-h-30"
                   />
                 </div>
 
                 <div>
-                  <label className="text-text-muted text-xs tracking-widest uppercase mb-2 block">
+                  <Label className="text-text-muted text-xs tracking-widest uppercase mb-2 block">
                     Add Photos (Optional)
-                  </label>
+                  </Label>
                   <div className="flex flex-wrap gap-2 mb-2">
                     {images.map((img, index) => (
                       <div key={index} className="relative w-16 h-16 rounded-md overflow-hidden border border-border">
                         <Image src={img} alt="Uploaded preview" fill className="object-cover" />
-                        <button
+                        <Button
                           type="button"
                           onClick={() => removeImage(index)}
-                          className="absolute top-1 right-1 bg-black/50 rounded-full p-0.5 hover:bg-red-500 transition-colors"
+                          aria-label="Remove uploaded image"
+                          variant="ghost"
+                          size="icon-xs"
+                          className="absolute top-1 right-1 bg-black/50 hover:bg-red-500"
                         >
                           <X size={12} className="text-white" />
-                        </button>
+                        </Button>
                       </div>
                     ))}
                     {images.length < 3 && (
-                      <button
+                      <Button
                         type="button"
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploadingImage}
-                        className="w-16 h-16 rounded-md border border-dashed border-border flex items-center justify-center hover:border-gold hover:text-gold transition-colors text-text-muted"
+                        aria-label="Upload review image"
+                        variant="outline"
+                        size="icon-xs"
+                        className="w-16 h-16 border-dashed text-text-muted hover:text-gold"
                       >
                         {uploadingImage ? <Loader2 size={16} className="animate-spin" /> : <ImageIcon size={20} />}
-                      </button>
+                      </Button>
                     )}
-                    <input
+                    <Input
                       type="file"
                       accept="image/*"
                       ref={fileInputRef}
                       onChange={handleImageUpload}
+                      aria-label="Upload review image"
                       className="hidden"
                     />
                   </div>
                 </div>
 
-                <button
+                <Button
                   type="submit"
                   disabled={submitting}
-                  className="w-full bg-gold text-primary font-semibold py-3 rounded-lg tracking-widest uppercase text-xs transition-all duration-300 hover:bg-soft-gold disabled:opacity-60 flex justify-center items-center gap-2"
+                  className="w-full"
                 >
                   {submitting && <Loader2 size={14} className="animate-spin" />}
                   {submitting ? "Submitting..." : "Submit Review"}
-                </button>
+                </Button>
               </form>
             ) : userEmail ? (
               <div className="text-center py-6 bg-primary/30 border border-border rounded-lg">

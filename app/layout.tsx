@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Playfair_Display, Inter, Cinzel } from "next/font/google";
+import { Playfair_Display, Inter, Cinzel, Geist } from "next/font/google";
 import "./globals.css";
 import { CartProvider } from "@/lib/cart-context";
 import { WishlistProvider } from "@/lib/wishlist-context";
@@ -7,6 +7,9 @@ import { AuthProvider } from "@/lib/auth-context";
 import { ToastProvider } from "@/components/ui/Toast";
 import { ClientLayout } from "@/components/layout/ClientLayout";
 import { SITE_NAME, SITE_DESCRIPTION, SITE_URL } from "@/lib/constants";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -76,7 +79,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${inter.variable} ${cinzel.variable}`}
+      className={cn(playfair.variable, inter.variable, cinzel.variable, "font-sans", geist.variable)}
       data-scroll-behavior="smooth"
     >
       <head>

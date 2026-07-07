@@ -14,6 +14,18 @@ import {
 import { useAuth } from "@/lib/auth-context";
 import { INDIAN_STATES } from "@/lib/constants";
 import { useToast } from "@/components/ui/Toast";
+import { Button } from "@/components/ui/Button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { motion, AnimatePresence } from "motion/react";
 
 import { ShippingAddress } from "@/types/common.types";
@@ -79,9 +91,13 @@ const ShippingAddressesComponent = () => {
 
   useEffect(() => {
     if (email) {
-      fetchAddresses();
+      queueMicrotask(() => {
+        fetchAddresses();
+      });
     } else {
-      setLoading(false);
+      queueMicrotask(() => {
+        setLoading(false);
+      });
     }
   }, [email, fetchAddresses]);
 
@@ -289,7 +305,7 @@ const ShippingAddressesComponent = () => {
             Manage your delivery locations
           </p>
         </div>
-        <button
+        <Button
           onClick={() => {
             if (showForm) {
               setShowForm(false);
@@ -298,7 +314,8 @@ const ShippingAddressesComponent = () => {
               setShowForm(true);
             }
           }}
-          className="flex items-center gap-2 text-sm text-gold hover:text-soft-gold transition-colors uppercase tracking-widest"
+          variant="ghost"
+          className="flex items-center gap-2 text-sm uppercase tracking-widest"
         >
           {showForm ? (
             "Cancel"
@@ -307,7 +324,7 @@ const ShippingAddressesComponent = () => {
               <Plus size={16} /> Add New
             </>
           )}
-        </button>
+        </Button>
       </div>
 
       <AnimatePresence mode="wait">
@@ -330,10 +347,11 @@ const ShippingAddressesComponent = () => {
               className="space-y-6 relative z-10"
             >
               <motion.div variants={itemVariants} className="flex gap-3">
-                <button
+                <Button
                   type="button"
                   onClick={() => setAddressType("home")}
-                  className={`flex-1 py-2.5 px-4 rounded-xl border flex items-center justify-center gap-2 transition-all duration-300 ${
+                  variant={addressType === "home" ? "outline" : "secondary"}
+                  className={`flex-1 py-2.5 px-4 h-auto rounded-xl border flex items-center justify-center gap-2 transition-all duration-300 ${
                     addressType === "home"
                       ? "bg-gold/10 border-gold/50 text-gold shadow-[0_0_15px_rgba(197,160,89,0.2)]"
                       : "bg-white/5 border-white/10 text-text-muted hover:border-white/20"
@@ -348,11 +366,12 @@ const ShippingAddressesComponent = () => {
                   <span className="text-sm font-medium tracking-wide">
                     HOME
                   </span>
-                </button>
-                <button
+                </Button>
+                <Button
                   type="button"
                   onClick={() => setAddressType("work")}
-                  className={`flex-1 py-2.5 px-4 rounded-xl border flex items-center justify-center gap-2 transition-all duration-300 ${
+                  variant={addressType === "work" ? "outline" : "secondary"}
+                  className={`flex-1 py-2.5 px-4 h-auto rounded-xl border flex items-center justify-center gap-2 transition-all duration-300 ${
                     addressType === "work"
                       ? "bg-teal-500/10 border-teal-500/50 text-teal-400 shadow-[0_0_15px_rgba(20,184,166,0.2)]"
                       : "bg-white/5 border-white/10 text-text-muted hover:border-white/20"
@@ -367,7 +386,7 @@ const ShippingAddressesComponent = () => {
                   <span className="text-sm font-medium tracking-wide">
                     WORK
                   </span>
-                </button>
+                </Button>
               </motion.div>
 
               <motion.div
@@ -383,7 +402,7 @@ const ShippingAddressesComponent = () => {
                     <MapPin size={10} className="text-gold" /> INDIA
                   </span>
                 </div>
-                <input
+                <Input
                   required
                   id="pincode"
                   type="text"
@@ -391,14 +410,15 @@ const ShippingAddressesComponent = () => {
                   value={form.pincode}
                   onChange={handlePincodeChange}
                   onBlur={handlePincodeBlur}
+                  aria-invalid={pincodeError}
                   className={`peer w-full bg-white/5 border ${pincodeError ? "border-red-500/50 focus:border-red-500" : "border-white/10 focus:border-gold"} rounded-xl px-4 pt-6 pb-2 text-text-light placeholder-transparent focus:outline-none focus:ring-1 ${pincodeError ? "focus:ring-red-500/50" : "focus:ring-gold/50"} transition-all`}
                 />
-                <label
+                <Label
                   htmlFor="pincode"
                   className="absolute left-4 top-4 text-xs text-text-muted uppercase tracking-widest transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-gold pointer-events-none"
                 >
                   Pincode (6 Digits)
-                </label>
+                </Label>
                 {pincodeError && (
                   <p className="text-red-400 text-xs mt-1.5 ml-1 flex items-center gap-1">
                     <AlertCircle size={12} /> Invalid Pincode
@@ -415,7 +435,7 @@ const ShippingAddressesComponent = () => {
                     className="grid grid-cols-2 gap-4"
                   >
                     <div className="relative">
-                      <input
+                      <Input
                         required
                         id="city"
                         placeholder=" "
@@ -425,42 +445,39 @@ const ShippingAddressesComponent = () => {
                         }
                         className="peer w-full bg-white/5 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-text-light placeholder-transparent focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/50 transition-all"
                       />
-                      <label
+                      <Label
                         htmlFor="city"
                         className="absolute left-4 top-4 text-xs text-text-muted uppercase tracking-widest transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-gold pointer-events-none"
                       >
                         City
-                      </label>
+                      </Label>
                     </div>
                     <div className="relative">
-                      <select
-                        required
-                        id="state"
-                        value={form.state}
-                        onChange={(e) =>
-                          setForm({ ...form, state: e.target.value })
-                        }
-                        className="peer w-full bg-white/5 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-text-light focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/50 transition-all appearance-none cursor-pointer"
-                      >
-                        <option value="" disabled className="bg-[#111]">
-                          Select State
-                        </option>
-                        {INDIAN_STATES.map((st) => (
-                          <option
-                            key={st}
-                            value={st}
-                            className="bg-[#111] text-text-light"
-                          >
-                            {st}
-                          </option>
-                        ))}
-                      </select>
-                      <label
+                      <Label
                         htmlFor="state"
                         className="absolute left-4 top-2 text-[10px] text-text-muted uppercase tracking-widest pointer-events-none"
                       >
                         State
-                      </label>
+                      </Label>
+                      <Select
+                        value={form.state}
+                        onValueChange={(value) =>
+                          setForm({ ...form, state: value ?? "" })
+                        }
+                      >
+                        <SelectTrigger id="state" className="peer w-full bg-white/5 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-text-light focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/50 transition-all appearance-none cursor-pointer">
+                          <SelectValue placeholder="Select State" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {INDIAN_STATES.map((st) => (
+                              <SelectItem key={st} value={st}>
+                                {st}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
                     </div>
                   </motion.div>
                 )}
@@ -471,7 +488,7 @@ const ShippingAddressesComponent = () => {
                 className="grid grid-cols-2 gap-4"
               >
                 <div className="relative col-span-2 sm:col-span-1">
-                  <input
+                  <Input
                     required
                     id="fname"
                     placeholder=" "
@@ -479,15 +496,15 @@ const ShippingAddressesComponent = () => {
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     className="peer w-full bg-white/5 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-text-light placeholder-transparent focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/50 transition-all"
                   />
-                  <label
+                  <Label
                     htmlFor="fname"
                     className="absolute left-4 top-4 text-xs text-text-muted uppercase tracking-widest transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-gold pointer-events-none"
                   >
                     Full Name
-                  </label>
+                  </Label>
                 </div>
                 <div className="relative col-span-2 sm:col-span-1">
-                  <input
+                  <Input
                     required
                     id="phone"
                     placeholder=" "
@@ -497,17 +514,17 @@ const ShippingAddressesComponent = () => {
                     }
                     className="peer w-full bg-white/5 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-text-light placeholder-transparent focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/50 transition-all"
                   />
-                  <label
+                  <Label
                     htmlFor="phone"
                     className="absolute left-4 top-4 text-xs text-text-muted uppercase tracking-widest transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-gold pointer-events-none"
                   >
                     Mobile Number
-                  </label>
+                  </Label>
                 </div>
               </motion.div>
 
               <motion.div variants={itemVariants} className="relative">
-                <input
+                <Input
                   required
                   id="address"
                   placeholder=" "
@@ -517,16 +534,16 @@ const ShippingAddressesComponent = () => {
                   }
                   className="peer w-full bg-white/5 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-text-light placeholder-transparent focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/50 transition-all"
                 />
-                <label
+                <Label
                   htmlFor="address"
                   className="absolute left-4 top-4 text-xs text-text-muted uppercase tracking-widest transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-gold pointer-events-none"
                 >
                   House No, Building, Street, Area
-                </label>
+                </Label>
               </motion.div>
 
               <motion.div variants={itemVariants} className="relative">
-                <input
+                <Input
                   required
                   id="landmark"
                   placeholder=" "
@@ -536,40 +553,37 @@ const ShippingAddressesComponent = () => {
                   }
                   className="peer w-full bg-white/5 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-text-light placeholder-transparent focus:outline-none focus:border-gold focus:ring-1 focus:ring-gold/50 transition-all"
                 />
-                <label
+                <Label
                   htmlFor="landmark"
                   className="absolute left-4 top-4 text-xs text-text-muted uppercase tracking-widest transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-gold pointer-events-none"
                 >
                   Famous Landmark
-                </label>
+                </Label>
               </motion.div>
 
               <motion.div
                 variants={itemVariants}
                 className="flex items-center gap-3 pt-2"
               >
-                <input
-                  type="checkbox"
+                <Checkbox
                   id="isDefault"
                   checked={form.isDefault}
-                  onChange={(e) =>
-                    setForm({ ...form, isDefault: e.target.checked })
+                  onCheckedChange={(checked) =>
+                    setForm({ ...form, isDefault: checked === true })
                   }
-                  className="accent-gold w-4 h-4 rounded border-white/10 bg-white/5"
                 />
-                <label
+                <Label
                   htmlFor="isDefault"
                   className="text-sm text-text-light cursor-pointer tracking-wide"
                 >
                   Make this my default address
-                </label>
+                </Label>
               </motion.div>
 
-              <motion.button
-                variants={itemVariants}
+              <Button
                 type="submit"
                 disabled={submitting}
-                className="w-full mt-4 bg-linear-to-r from-gold to-soft-gold text-primary px-6 py-3.5 rounded-xl uppercase tracking-widest text-sm font-bold hover:shadow-[0_0_20px_rgba(197,160,89,0.4)] transition-all flex items-center justify-center min-w-[120px]"
+                className="w-full mt-4 min-w-30"
               >
                 {submitting ? (
                   <Loader2 size={18} className="animate-spin" />
@@ -578,7 +592,7 @@ const ShippingAddressesComponent = () => {
                 ) : (
                   "Save Smart Address"
                 )}
-              </motion.button>
+              </Button>
             </motion.div>
           </motion.form>
         )}
@@ -620,7 +634,7 @@ const ShippingAddressesComponent = () => {
               </h3>
               <p className="text-text-muted text-sm mb-4">{address.phone}</p>
               <div className="h-px w-full bg-linear-to-r from-white/10 to-transparent mb-4" />
-              <p className="text-[#999] text-sm leading-relaxed mb-5 min-h-[60px] tracking-wide">
+              <p className="text-[#999] text-sm leading-relaxed mb-5 min-h-15 tracking-wide">
                 {address.address}
                 <br />
                 {address.city}, {address.state}{" "}

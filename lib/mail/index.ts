@@ -36,10 +36,11 @@ export async function sendContactNotificationEmail(
   message: string
 ) {
   const transporter = await getTransporter();
+  const safeSubject = subject?.trim() || "General Inquiry";
   await transporter.sendMail({
     from: EMAIL_FROM,
     to: ADMIN_EMAIL,
-    subject: `New Inquiry: ${subject} — From ${name}`,
-    html: getContactNotificationTemplate(name, email, subject, message),
+    subject: `New Inquiry: ${safeSubject} — From ${name}`,
+    html: getContactNotificationTemplate(name, email, safeSubject, message),
   });
 }

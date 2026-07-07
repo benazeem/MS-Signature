@@ -102,7 +102,6 @@ export function ShopClient({
             className="flex items-center gap-2 text-text-muted text-xs tracking-widest uppercase border border-border px-5 py-2.5 rounded-full hover:border-gold hover:text-gold transition-all duration-300"
             id="mobile-filter-toggle"
             aria-label="Toggle mobile filters"
-            aria-expanded={mobileFiltersOpen}
           >
             {mobileFiltersOpen ? (
               <X size={14} />

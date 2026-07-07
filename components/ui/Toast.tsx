@@ -49,7 +49,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 animate={{ opacity: 1, x: 0, scale: 1 }}
                 exit={{ opacity: 0, x: 40, scale: 0.95 }}
                 transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-                className={`pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl bg-[#111] border shadow-xl min-w-[260px] max-w-sm ${colors[toast.type]}`}
+                className={`pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl bg-[#111] border shadow-xl min-w-65 max-w-sm ${colors[toast.type]}`}
               >
                 <Icon size={16} className="shrink-0" />
                 <p className="text-text-light text-sm flex-1 leading-snug">
@@ -57,6 +57,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 </p>
                 <button
                   onClick={() => dismiss(toast.id)}
+                  aria-label="Dismiss toast"
                   className="text-text-muted hover:text-text-light transition-colors shrink-0"
                 >
                   <X size={14} />

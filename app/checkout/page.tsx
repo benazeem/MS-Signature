@@ -6,6 +6,16 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/Button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import Image from "next/image";
 import {
@@ -59,7 +69,7 @@ export default function CheckoutPage() {
   const [fetchingPincode, setFetchingPincode] = useState(false);
   const [pincodeError, setPincodeError] = useState(false);
 
-  const shipping = totalPrice >= 999 ? 0 : 99;
+  const shipping = 0; // Shipping is free on all orders
   const grandTotal = totalPrice + shipping;
 
   const fetchSavedAddresses = useCallback(async () => {
@@ -90,13 +100,15 @@ export default function CheckoutPage() {
     } catch (err) {
       console.error("Failed to fetch addresses", err);
     }
-  }, [user?.email]);
+  }, [user]);
 
   useEffect(() => {
     if (user?.email) {
-      fetchSavedAddresses();
+      queueMicrotask(() => {
+        fetchSavedAddresses();
+      });
     }
-  }, [user?.email, fetchSavedAddresses]);
+  }, [user, fetchSavedAddresses]);
 
   const handlePincodeChange = async (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -299,6 +311,9 @@ export default function CheckoutPage() {
                   {user?.email || form.email}
                 </strong>
               </p>
+              <p className="text-text-muted text-sm mb-6">
+                <span className="text-green-400 font-medium">Free delivery on all orders</span>
+              </p>
               <div className="flex gap-4 justify-center">
                 <Button href="/" variant="outline" id="checkout-home-btn">
                   Back to Home
@@ -350,8 +365,10 @@ export default function CheckoutPage() {
                     {user && savedAddresses.length > 0 && (
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
                         {savedAddresses.map((addr) => (
-                          <button
+                          <Button
                             key={addr.id}
+                            type="button"
+                            variant={selectedAddressId === addr.id ? "outline" : "secondary"}
                             onClick={() => {
                               setSelectedAddressId(addr.id);
                               setShowAddressForm(false);
@@ -368,7 +385,7 @@ export default function CheckoutPage() {
                                 pincode: addr.pincode,
                               });
                             }}
-                            className={`p-4 rounded-xl border text-left transition-all ${
+                            className={`h-auto w-full justify-start p-4 text-left transition-all ${
                               selectedAddressId === addr.id
                                 ? "border-gold bg-gold/5 shadow-[0_0_15px_rgba(197,160,89,0.1)]"
                                 : "border-border bg-accent/5 hover:border-border/80"
@@ -396,9 +413,11 @@ export default function CheckoutPage() {
                             <p className="text-text-muted text-xs">
                               {addr.city}, {addr.pincode}
                             </p>
-                          </button>
+                          </Button>
                         ))}
-                        <button
+                        <Button
+                          type="button"
+                          variant={selectedAddressId === "new" ? "outline" : "secondary"}
                           onClick={() => {
                             setSelectedAddressId("new");
                             setShowAddressForm(true);
@@ -412,7 +431,7 @@ export default function CheckoutPage() {
                               pincode: "",
                             });
                           }}
-                          className={`p-4 rounded-xl border border-dashed flex flex-col items-center justify-center gap-2 transition-all ${
+                          className={`h-auto min-h-32 rounded-xl border border-dashed flex flex-col items-center justify-center gap-2 transition-all ${
                             selectedAddressId === "new"
                               ? "border-gold bg-gold/5 text-gold"
                               : "border-border text-text-muted hover:border-text-muted/50"
@@ -422,7 +441,7 @@ export default function CheckoutPage() {
                           <span className="text-xs font-medium uppercase tracking-widest">
                             New Address
                           </span>
-                        </button>
+                        </Button>
                       </div>
                     )}
 
@@ -441,67 +460,69 @@ export default function CheckoutPage() {
                                 <MapPin size={8} className="text-gold" /> INDIA
                               </span>
                             </div>
-                            <input
+                            <Input
+                              id="checkout-pincode"
                               required
                               name="pincode"
                               value={form.pincode}
                               onChange={handlePincodeChange}
                               placeholder=" "
+                              aria-invalid={pincodeError}
                               className={`peer w-full bg-white/5 border ${pincodeError ? "border-red-500/50 focus:border-red-500" : "border-white/10 focus:border-gold"} rounded-xl px-4 pt-6 pb-2 text-text-light placeholder-transparent focus:outline-none transition-all`}
                             />
-                            <label className="absolute left-4 top-4 text-xs text-text-muted uppercase tracking-widest transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-gold pointer-events-none">
+                            <Label
+                              htmlFor="checkout-pincode"
+                              className="absolute left-4 top-4 text-xs text-text-muted uppercase tracking-widest transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-gold pointer-events-none"
+                            >
                               Pincode
-                            </label>
+                            </Label>
                           </div>
 
                           {form.pincode.length === 6 && !pincodeError && (
                             <>
                               <div className="relative col-span-2 sm:col-span-1">
-                                <input
+                                <Input
+                                  id="checkout-city"
                                   required
                                   name="city"
                                   value={form.city}
                                   onChange={handleFormChange}
                                   className="peer w-full bg-white/5 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-text-light focus:outline-none focus:border-gold transition-all"
                                 />
-                                <label className="absolute left-4 top-2 text-[10px] text-text-muted uppercase tracking-widest">
+                                <Label htmlFor="checkout-city" className="absolute left-4 top-2 text-[10px] text-text-muted uppercase tracking-widest">
                                   City
-                                </label>
+                                </Label>
                               </div>
                               <div className="relative col-span-2 sm:col-span-1">
-                                <select
-                                  required
-                                  name="state"
-                                  value={form.state}
-                                  onChange={handleFormChange}
-                                  className="peer w-full bg-white/5 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-text-light focus:outline-none focus:border-gold transition-all appearance-none"
-                                >
-                                  <option
-                                    value=""
-                                    disabled
-                                    className="bg-[#111]"
-                                  >
-                                    State
-                                  </option>
-                                  {INDIAN_STATES.map((s) => (
-                                    <option
-                                      key={s}
-                                      value={s}
-                                      className="bg-[#111]"
-                                    >
-                                      {s}
-                                    </option>
-                                  ))}
-                                </select>
-                                <label className="absolute left-4 top-2 text-[10px] text-text-muted uppercase tracking-widest">
+                                <Label htmlFor="checkout-state" className="absolute left-4 top-2 text-[10px] text-text-muted uppercase tracking-widest">
                                   State
-                                </label>
+                                </Label>
+                                <Select
+                                  value={form.state}
+                                  onValueChange={(value) =>
+                                    setForm((prev) => ({ ...prev, state: (value ?? "") as string }))
+                                  }
+                                >
+                                  <SelectTrigger id="checkout-state" className="peer w-full bg-white/5 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-text-light focus:outline-none focus:border-gold transition-all appearance-none">
+                                    <SelectValue placeholder="State" />
+                                  </SelectTrigger>
+                                  <SelectContent>
+                                    <SelectGroup>
+                                      {INDIAN_STATES.map((s) => (
+                                        <SelectItem key={s} value={s}>
+                                          {s}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectGroup>
+                                  </SelectContent>
+                                </Select>
                               </div>
                             </>
                           )}
 
                           <div className="relative col-span-2 sm:col-span-1">
-                            <input
+                            <Input
+                              id="checkout-name"
                               required
                               name="name"
                               value={form.name}
@@ -509,13 +530,14 @@ export default function CheckoutPage() {
                               placeholder=" "
                               className="peer w-full bg-white/5 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-text-light placeholder-transparent focus:outline-none focus:border-gold transition-all"
                             />
-                            <label className="absolute left-4 top-4 text-xs text-text-muted uppercase tracking-widest transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-gold pointer-events-none">
+                            <Label htmlFor="checkout-name" className="absolute left-4 top-4 text-xs text-text-muted uppercase tracking-widest transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-gold pointer-events-none">
                               Full Name
-                            </label>
+                            </Label>
                           </div>
                           {!user && (
                             <div className="relative col-span-2 sm:col-span-1">
-                              <input
+                              <Input
+                                id="checkout-email"
                                 required
                                 type="email"
                                 name="email"
@@ -524,15 +546,16 @@ export default function CheckoutPage() {
                                 placeholder=" "
                                 className="peer w-full bg-white/5 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-text-light placeholder-transparent focus:outline-none focus:border-gold transition-all"
                               />
-                              <label className="absolute left-4 top-4 text-xs text-text-muted uppercase tracking-widest transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-gold pointer-events-none">
+                              <Label htmlFor="checkout-email" className="absolute left-4 top-4 text-xs text-text-muted uppercase tracking-widest transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-gold pointer-events-none">
                                 Email Address
-                              </label>
+                              </Label>
                             </div>
                           )}
                           <div
                             className={`relative col-span-2 ${user ? "sm:col-span-1" : ""}`}
                           >
-                            <input
+                            <Input
+                              id="checkout-phone"
                               required
                               name="phone"
                               value={form.phone}
@@ -540,12 +563,13 @@ export default function CheckoutPage() {
                               placeholder=" "
                               className="peer w-full bg-white/5 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-text-light placeholder-transparent focus:outline-none focus:border-gold transition-all"
                             />
-                            <label className="absolute left-4 top-4 text-xs text-text-muted uppercase tracking-widest transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-gold pointer-events-none">
+                            <Label htmlFor="checkout-phone" className="absolute left-4 top-4 text-xs text-text-muted uppercase tracking-widest transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-gold pointer-events-none">
                               Mobile
-                            </label>
+                            </Label>
                           </div>
                           <div className="relative col-span-2">
-                            <input
+                            <Input
+                              id="checkout-address"
                               required
                               name="address"
                               value={form.address}
@@ -553,9 +577,9 @@ export default function CheckoutPage() {
                               placeholder=" "
                               className="peer w-full bg-white/5 border border-white/10 rounded-xl px-4 pt-6 pb-2 text-text-light placeholder-transparent focus:outline-none focus:border-gold transition-all"
                             />
-                            <label className="absolute left-4 top-4 text-xs text-text-muted uppercase tracking-widest transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-gold pointer-events-none">
+                            <Label htmlFor="checkout-address" className="absolute left-4 top-4 text-xs text-text-muted uppercase tracking-widest transition-all peer-placeholder-shown:top-4 peer-placeholder-shown:text-sm peer-focus:top-2 peer-focus:text-[10px] peer-focus:text-gold pointer-events-none">
                               Address (House No, Street, Area)
-                            </label>
+                            </Label>
                           </div>
                         </div>
                       </div>
@@ -563,12 +587,13 @@ export default function CheckoutPage() {
                   </div>
 
                   {step === "payment" && (
-                    <button
+                    <Button
                       onClick={() => setStep("details")}
-                      className="text-xs text-text-muted hover:text-gold tracking-widest uppercase transition-colors"
+                      variant="ghost"
+                      className="text-xs tracking-widest uppercase transition-colors"
                     >
                       ← Edit details
-                    </button>
+                    </Button>
                   )}
                 </div>
 
@@ -699,29 +724,14 @@ export default function CheckoutPage() {
                       </div>
                       <div className="flex justify-between text-text-muted">
                         <span>Shipping</span>
-                        <span>
-                          {shipping === 0 ? (
-                            <span className="text-green-400">Free</span>
-                          ) : (
-                            `₹${shipping}`
-                          )}
-                        </span>
+                        <span className="text-green-400">Free delivery</span>
                       </div>
                       <div className="gold-separator my-3" />
                       <div className="flex justify-between text-text-light font-semibold text-base">
                         <span>Total</span>
-                        <span className="text-gold">
-                          ₹{grandTotal.toLocaleString("en-IN")}
-                        </span>
+                        <span className="text-gold">₹{grandTotal.toLocaleString("en-IN")}</span>
                       </div>
                     </div>
-
-                    {shipping > 0 && (
-                      <p className="text-[#666] text-xs mt-3">
-                        Add ₹{(999 - totalPrice).toLocaleString("en-IN")} more
-                        for free shipping
-                      </p>
-                    )}
                   </div>
                 </div>
               </div>
