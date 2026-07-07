@@ -10,14 +10,6 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isStudio = pathname?.startsWith("/studio");
 
-  if (isStudio) {
-    return (
-      <div className="min-h-screen w-screen bg-white">
-        {children}
-      </div>
-    );
-  }
-
   return (
     <>
       <a
@@ -31,7 +23,10 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
       <WhatsAppButton />
       <Navbar />
       {pathname === "/" && <div className="h-14 sm:h-16 lg:h-20" />}
-      <main id="content" className="flex-1 relative">{children}</main>
+      {/* Scope studio-specific white background only to the main content area */}
+      <main id="content" className={`flex-1 relative ${isStudio ? "bg-white" : ""}`}>
+        {children}
+      </main>
       <Footer />
     </>
   );

@@ -30,7 +30,7 @@ export function Navbar() {
 
   return (
     <header
-      className={`absolute top-0 left-0 right-0 z-50 transition-all duration-500 bg-transparent py-2`}
+      className="absolute top-0 left-0 right-0 z-50 transition-all duration-500 py-2 site-header"
     >
       <nav className="container-wide flex items-center justify-between h-20">
         <Link
@@ -122,7 +122,7 @@ export function Navbar() {
                     <Link
                       href="/track-order"
                       onClick={() => setUserMenuOpen(false)}
-                      className="flex items-center gap-2 px-4 py-3 text-text-muted text-sm hover:text-gold hover:bg-gold/5 transition-all border-b border-border/50"
+                      className="flex items-center gap-2 px-4 py-3 text-text-muted text-sm hover:text-gold hover:bg-white/5 transition-all border-b border-border/50"
                     >
                       <Package size={14} />
                       My Orders
@@ -130,7 +130,7 @@ export function Navbar() {
                     <Link
                       href="/shipping-addresses"
                       onClick={() => setUserMenuOpen(false)}
-                      className="flex items-center gap-2 px-4 py-3 text-text-muted text-sm hover:text-gold hover:bg-gold/5 transition-all"
+                      className="flex items-center gap-2 px-4 py-3 text-text-muted text-sm hover:text-gold hover:bg-white/5 transition-all"
                     >
                       <MapPin size={14} />
                       Addresses

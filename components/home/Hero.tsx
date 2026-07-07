@@ -27,7 +27,7 @@ export function Hero() {
         style={{ y: yBackground }}
         className="absolute inset-0 bg-primary z-0"
       >
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gold/5 rounded-full blur-[120px]" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-white/4 rounded-full blur-[120px]" />
       </motion.div>
 
       <div className="container-wide relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center pt-32 lg:pt-24 min-h-full lg:min-h-svh">
