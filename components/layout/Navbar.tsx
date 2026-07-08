@@ -5,13 +5,15 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useRef } from "react";
 import { NAV_LINKS } from "@/lib/constants";
-import { Package, X, Menu, MapPin } from "lucide-react";
+import { X, Menu } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 export function Navbar() {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement | null>(null);
+  const mobileToggleRef = useRef<HTMLButtonElement | null>(null);
   const userMenuRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -28,6 +30,25 @@ export function Navbar() {
     return () => document.removeEventListener("mousedown", handlePointerDown);
   }, [userMenuOpen]);
 
+  useEffect(() => {
+    if (!mobileOpen) return;
+
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target as Node;
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(target) &&
+        mobileToggleRef.current &&
+        !mobileToggleRef.current.contains(target)
+      ) {
+        setMobileOpen(false);
+      }
+    };
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, [mobileOpen]);
+
   return (
     <header
       className="absolute top-0 left-0 right-0 z-50 transition-all duration-500 py-2 site-header"
@@ -35,19 +56,19 @@ export function Navbar() {
       <nav className="container-wide flex items-center justify-between h-20">
         <Link
           href="/"
-          className="flex items-center gap-3 group"
+          className="flex items-center gap-1.5 group"
           id="nav-logo"
           aria-label="Home"
         >
           <Image
-            src="/MS_Signature_Logo.jpg"
+            src="/MS_Signature.png"
             alt="MS Signature Logo"
-            width={160}
+            width={112}
             height={48}
-            className="object-contain h-12 sm:h-14 md:h-16"
+            className="object-contain h-10 sm:h-11 md:h-12 shrink-0"
             priority
           />
-          <div className="hidden sm:flex flex-col">
+          <div className="hidden sm:flex flex-col -ml-0.5">
             <span className="font-(family-name:--font-cinzel) text-sm md:text-base tracking-[0.15em] text-gold group-hover:text-soft-gold transition-colors duration-500">
               MS SIGNATURE
             </span>
@@ -183,6 +204,7 @@ export function Navbar() {
           </Link> */}
 
           <button
+            ref={mobileToggleRef}
             id="nav-mobile-toggle"
             className="md:hidden flex items-center justify-center w-8 h-8"
             onClick={() => setMobileOpen(!mobileOpen)}
@@ -216,6 +238,7 @@ export function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
+            ref={mobileMenuRef}
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
@@ -227,6 +250,7 @@ export function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
+                  onClick={() => setMobileOpen(false)}
                   className={`text-sm tracking-widest uppercase ${
                     pathname === link.href ? "text-gold" : "text-text-muted"
                   }`}

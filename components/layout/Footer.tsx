@@ -54,7 +54,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10">
           <div className="lg:col-span-2">
             <Link href="/" className="flex items-center gap-4 mb-6 group" aria-label="Home">
-              <Image src="/MS_Signature_Logo.jpg" alt="MS Signature Logo" width={140} height={40} className="object-contain" />
+              <Image src="/MS_Signature.png" alt="MS Signature Logo" width={140} height={40} className="object-contain" />
               <div className="hidden sm:block">
                 <span className="font-(family-name:--font-cinzel) text-base tracking-[0.15em] text-gold group-hover:text-soft-gold transition-colors duration-500">
                   MS SIGNATURE
